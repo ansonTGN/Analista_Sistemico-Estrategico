@@ -16,3 +16,7 @@ futures = "0.3"
 uuid = { version = "1.4", features = ["v4"] }
 dotext = "0.1"
 pdf-extract = "0.7"
+
+# --- FIX CRITICO ---
+# Forzamos una versión estable de 'ignore' para evitar el error de 'edition2024'
+ignore = "=0.4.22"
