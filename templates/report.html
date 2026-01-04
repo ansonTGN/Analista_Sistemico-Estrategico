@@ -1,122 +1,685 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Informe Estratégico</title>
-    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-    
-    <style>
-        :root { --primary: #111; --accent: #8e1600; --bg: #f3f4f6; --paper: #fff; }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Informe Estratégico</title>
 
-        body {
-            background-color: var(--bg);
-            font-family: 'Lato', sans-serif;
-            color: #333;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+  <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+  <style>
+    :root{
+      --bg0:#0a0e17;
+      --bg1:#0b1220;
+      --card:#111827;
+      --muted:#93a3b8;
+      --text:#e5e7eb;
+      --paper:#ffffff;
+      --ink:#111827;
+      --border:#e5e7eb;
+      --accent:#8e1600;
+      --shadow: 0 18px 40px rgba(0,0,0,0.35);
+      --shadow-soft: 0 10px 24px rgba(0,0,0,0.18);
+
+      --topbar-h: 64px;
+      --sidebar-w: 320px;
+      --radius: 14px;
+    }
+
+    * { box-sizing: border-box; }
+    html, body { height: 100%; }
+
+    body{
+      margin:0;
+      font-family: 'Lato', sans-serif;
+      background: radial-gradient(1000px 600px at 20% 0%, rgba(142,22,0,0.18), transparent 55%),
+                  radial-gradient(900px 550px at 90% 20%, rgba(59,130,246,0.14), transparent 50%),
+                  linear-gradient(180deg, var(--bg0), var(--bg1));
+      color: var(--text);
+    }
+
+    /* ===== Topbar ===== */
+    .topbar{
+      position: sticky;
+      top: 0;
+      z-index: 1200;
+      height: var(--topbar-h);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 18px;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      background: rgba(8, 12, 20, 0.65);
+      backdrop-filter: blur(10px);
+    }
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      font-weight:700;
+      letter-spacing:0.2px;
+      color: var(--text);
+      opacity:0.95;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 48vw;
+    }
+    .brand-dot{
+      width:10px;height:10px;border-radius:50%;
+      background: #2dd4bf;
+      box-shadow: 0 0 12px rgba(45,212,191,0.45);
+      flex: 0 0 auto;
+    }
+    .top-actions{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      flex: 0 0 auto;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+    .btn{
+      appearance:none;
+      border: 1px solid rgba(255,255,255,0.10);
+      background: rgba(17,24,39,0.55);
+      color: var(--text);
+      padding: 9px 12px;
+      border-radius: 10px;
+      font-weight: 700;
+      font-size: 0.92rem;
+      cursor: pointer;
+      transition: transform .06s ease, opacity .15s ease, border-color .15s ease;
+      text-decoration:none;
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      white-space: nowrap;
+    }
+    .btn:hover{ opacity:0.95; border-color: rgba(255,255,255,0.18); }
+    .btn:active{ transform: translateY(1px); }
+    .btn-accent{
+      background: rgba(142,22,0,0.92);
+      border-color: rgba(142,22,0,0.15);
+    }
+    .btn-ghost{
+      background: rgba(17,24,39,0.25);
+    }
+
+    /* ===== Layout ===== */
+    #pdf-capture{
+      /* Este es el contenedor que se captura para PDF y se exporta a HTML */
+      padding: 18px;
+    }
+
+    .layout{
+      display:flex;
+      gap:18px;
+      align-items:flex-start;
+      max-width: 1400px;
+      margin: 0 auto;
+      padding-top: 14px;
+    }
+
+    /* ===== Sidebar (Contenido) ===== */
+    .sidebar{
+      width: var(--sidebar-w);
+      background: rgba(17,24,39,0.55);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-soft);
+      overflow: hidden;
+      position: sticky;
+      top: calc(var(--topbar-h) + 18px);
+    }
+    .sidebar-header{
+      padding: 14px 14px 10px;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      display:flex;
+      align-items:center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+    .sidebar-title{
+      font-weight:700;
+      letter-spacing:0.2px;
+      color: var(--text);
+    }
+    .sidebar-date{
+      font-size: 0.8rem;
+      color: var(--muted);
+      white-space: nowrap;
+    }
+    .toc{
+      padding: 10px 10px 12px;
+      max-height: calc(100vh - var(--topbar-h) - 80px);
+      overflow:auto;
+    }
+    .toc a{
+      display:block;
+      padding: 10px 10px;
+      border-radius: 10px;
+      text-decoration:none;
+      color: rgba(229,231,235,0.92);
+      border: 1px solid transparent;
+      font-size: 0.92rem;
+      line-height: 1.25;
+    }
+    .toc a:hover{
+      background: rgba(255,255,255,0.05);
+      border-color: rgba(255,255,255,0.08);
+    }
+    .toc a.active{
+      background: rgba(59,130,246,0.14);
+      border-color: rgba(59,130,246,0.28);
+    }
+    .toc .lvl-h2{ font-weight: 700; }
+    .toc .lvl-h3{ padding-left: 18px; opacity: 0.95; }
+    .toc .lvl-h4{ padding-left: 30px; opacity: 0.9; font-size: 0.9rem; }
+
+    /* ===== Main “paper” ===== */
+    .main{
+      flex: 1 1 auto;
+      min-width: 520px;
+    }
+
+    #report-content{
+      background: var(--paper);
+      color: var(--ink);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      border: 1px solid rgba(17,24,39,0.12);
+      overflow: hidden;
+    }
+
+    .paper-inner{
+      padding: 34px 40px 40px;
+      border-top: 8px solid var(--accent);
+    }
+
+    .meta-row{
+      display:flex;
+      justify-content: space-between;
+      align-items:center;
+      gap: 14px;
+      font-size: 0.78rem;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+      color: #6b7280;
+      margin-bottom: 10px;
+    }
+
+    h1{
+      font-family: 'Playfair Display', serif;
+      font-size: 2.05rem;
+      margin: 10px 0 14px;
+      padding-bottom: 10px;
+      border-bottom: 2px solid #111;
+      color: #111;
+    }
+
+    h2{
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem;
+      margin: 16px 0 8px;
+      color: #111;
+    }
+    h3{
+      font-family: 'Playfair Display', serif;
+      font-size: 1.25rem;
+      margin: 16px 0 10px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--border);
+      color:#111;
+    }
+    h4{
+      font-family: 'Playfair Display', serif;
+      font-size: 1.06rem;
+      margin: 12px 0 8px;
+      color:#111;
+    }
+
+    p, li{ line-height: 1.7; font-size: 1rem; }
+    p{ margin: 10px 0; }
+    ul, ol{ margin: 10px 0 10px 18px; padding:0; }
+    li{ margin: 6px 0; }
+
+    a{ color: var(--accent); text-decoration: underline; text-underline-offset: 2px; }
+
+    .grid-2 { display:grid; grid-template-columns: 1fr; gap: 16px; }
+    @media (min-width: 980px){ .grid-2{ grid-template-columns: 1fr 1fr; } }
+
+    .card{
+      background:#fff;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 14px 16px;
+      box-shadow: 0 4px 14px rgba(17,24,39,0.05);
+    }
+
+    .executive-summary{
+      background: #fff7f5;
+      padding: 14px 16px;
+      border-left: 6px solid var(--accent);
+      border-radius: 12px;
+      margin: 18px 0;
+      border: 1px solid rgba(142,22,0,0.15);
+    }
+    .highlight{ font-weight: 700; font-size: 1.05rem; }
+
+    /* PESTEL */
+    .pestel-container{
+      margin: 18px 0 22px;
+      border: 1px solid var(--border);
+      padding: 16px;
+      background: #fff;
+      border-radius: 14px;
+    }
+    .pestel-title{
+      margin-top: 0;
+      color: #374151;
+      border-bottom: 2px solid var(--border);
+      font-size: 0.95rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      padding-bottom: 8px;
+    }
+    .pestel-grid{
+      display:grid;
+      grid-template-columns: 1fr;
+      gap:12px;
+      margin-top: 14px;
+    }
+    @media (min-width: 980px){ .pestel-grid{ grid-template-columns: 1fr 1fr 1fr; } }
+    .p-item{
+      font-size: 0.95rem;
+      background: #fcfcfd;
+      padding: 12px 12px;
+      border-left: 4px solid #888;
+      border-radius: 10px;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.04);
+    }
+    .p-item:nth-child(1) { border-color: #e74c3c; }
+    .p-item:nth-child(2) { border-color: #f1c40f; }
+    .p-item:nth-child(3) { border-color: #3498db; }
+    .p-item:nth-child(4) { border-color: #9b59b6; }
+    .p-item:nth-child(5) { border-color: #2ecc71; }
+    .p-item:nth-child(6) { border-color: #34495e; }
+
+    .pestel-synthesis{
+      margin-top: 14px;
+      font-style: italic;
+      color: #6b7280;
+      font-size: 0.95rem;
+      border-top: 1px dotted #cbd5e1;
+      padding-top: 10px;
+    }
+
+    /* Tablas y code (anti-recorte) */
+    table{
+      width: 100%;
+      border-collapse: collapse;
+      margin: 12px 0;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+      table-layout: fixed;
+    }
+    th, td{
+      border-bottom: 1px solid var(--border);
+      padding: 10px 10px;
+      vertical-align: top;
+      font-size: 0.95rem;
+      word-wrap: break-word;
+      overflow-wrap: anywhere;
+    }
+    th{ background: #f9fafb; font-weight: 700; text-align:left; }
+    tr:last-child td{ border-bottom: none; }
+
+    pre{
+      background: #0b1220;
+      color: #e5e7eb;
+      padding: 12px 14px;
+      border-radius: 12px;
+      overflow: auto;
+      border: 1px solid rgba(255,255,255,0.08);
+      margin: 12px 0;
+    }
+    code{
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono","Courier New", monospace;
+      font-size: 0.95em;
+    }
+
+    .footer-note{
+      margin-top: 32px;
+      border-top: 1px solid #eee;
+      padding-top: 16px;
+      text-align:center;
+      font-size: 0.78rem;
+      color: #9ca3af;
+    }
+
+    /* Responsive */
+    @media (max-width: 980px){
+      .layout{ flex-direction: column; }
+      .sidebar{ width: 100%; position: relative; top: 0; }
+      .main{ min-width: auto; }
+    }
+
+    /* ===== PDF MODE ===== (aplicado en el clon del canvas) */
+    .pdf-mode #pdf-capture{ padding: 10mm !important; }
+    .pdf-mode .layout{ max-width: none !important; margin: 0 !important; padding-top: 0 !important; }
+    .pdf-mode .paper-inner{ padding: 18mm 18mm 18mm !important; border-top-width: 6px !important; }
+    .pdf-mode .card,
+    .pdf-mode .executive-summary,
+    .pdf-mode table,
+    .pdf-mode pre{
+      break-inside: avoid;
+      page-break-inside: avoid;
+    }
+    .pdf-mode pre{
+      white-space: pre-wrap !important;
+      word-break: break-word !important;
+      overflow: visible !important;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="topbar" data-html2canvas-ignore="true">
+    <div class="brand">
+      <span class="brand-dot"></span>
+      <span>Urbina &amp; Meadows Systemic Engine</span>
+    </div>
+    <div class="top-actions">
+      <a href="/" class="btn btn-ghost">Volver</a>
+      <button type="button" class="btn btn-ghost" onclick="readReport()">Leer</button>
+      <button type="button" class="btn btn-accent" onclick="downloadPDF()">Descargar PDF</button>
+      <button type="button" class="btn btn-ghost" onclick="downloadHTML()">Descargar HTML</button>
+      <button type="button" class="btn btn-ghost" onclick="copyLink()">Copiar enlace</button>
+    </div>
+  </div>
+
+  <div id="pdf-capture">
+    <div class="layout">
+      <aside class="sidebar">
+        <div class="sidebar-header">
+          <div class="sidebar-title">Contenido</div>
+          <div class="sidebar-date" id="side-date"></div>
+        </div>
+        <nav class="toc" id="toc"></nav>
+      </aside>
+
+      <main class="main">
+        <div id="report-content">
+          <div class="paper-inner">
+            <div class="meta-row">
+              <span>Confidencial</span>
+              <span id="date"></span>
+            </div>
+
+            <h1>Informe Estratégico</h1>
+
+            {{ report | safe }}
+
+            <div class="footer-note">
+              Urbina &amp; Meadows Systemic Engine | PESTEL Module
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <script>
+    // Fecha
+    const now = new Date().toLocaleDateString('es-ES', { year:'numeric', month:'long', day:'2-digit' });
+    document.getElementById('date').innerText = now.toUpperCase();
+    document.getElementById('side-date').innerText = now;
+
+    // Leer (TTS)
+    function readReport() {
+      window.speechSynthesis.cancel();
+      const txt = document.getElementById('report-content').innerText;
+      const u = new SpeechSynthesisUtterance(txt);
+      u.lang = 'es-ES';
+      window.speechSynthesis.speak(u);
+    }
+
+    // Copiar enlace
+    async function copyLink() {
+      try {
+        await navigator.clipboard.writeText(window.location.href);
+      } catch (_) {
+        const ta = document.createElement('textarea');
+        ta.value = window.location.href;
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+      }
+    }
+
+    // TOC desde headings
+    function slugify(s) {
+      return s.toLowerCase()
+        .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+        .replace(/[^a-z0-9\s-]/g, '')
+        .trim()
+        .replace(/\s+/g, '-')
+        .replace(/-+/g, '-');
+    }
+
+    function buildTOC() {
+      const root = document.getElementById('report-content');
+      const toc = document.getElementById('toc');
+      toc.innerHTML = '';
+
+      const headings = root.querySelectorAll('article h2, article h3, article h4, h2, h3, h4');
+      const seen = new Set();
+
+      headings.forEach(h => {
+        const text = (h.textContent || '').trim();
+        if (!text) return;
+
+        if (!h.id) {
+          let base = slugify(text);
+          let id = base;
+          let i = 2;
+          while (seen.has(id) || document.getElementById(id)) id = `${base}-${i++}`;
+          h.id = id;
+          seen.add(id);
         }
 
-        .controls {
-            position: fixed; bottom: 0; left: 0; width: 100%;
-            background: #1a1a1a; padding: 15px;
-            display: flex; justify-content: space-around;
-            z-index: 1000; box-shadow: 0 -4px 10px rgba(0,0,0,0.2);
-        }
-        @media (min-width: 768px) {
-            .controls {
-                top: 20px; bottom: auto; left: auto; right: 20px; width: auto;
-                background: transparent; box-shadow: none; gap: 10px; padding: 0;
-            }
-        }
+        const a = document.createElement('a');
+        a.href = `#${h.id}`;
+        a.textContent = text;
 
-        .btn {
-            background: #333; color: #fff; border: none; padding: 12px 20px;
-            border-radius: 4px; font-weight: bold; text-decoration: none;
-            font-size: 0.9rem; cursor: pointer;
-        }
-        .btn-accent { background: var(--accent); }
+        if (h.tagName === 'H2') a.classList.add('lvl-h2');
+        if (h.tagName === 'H3') a.classList.add('lvl-h3');
+        if (h.tagName === 'H4') a.classList.add('lvl-h4');
 
-        #report-content {
-            background: var(--paper);
-            width: 100%; max-width: 800px;
-            margin-bottom: 80px; padding: 30px 20px;
-            box-sizing: border-box;
-        }
-        @media (min-width: 768px) {
-            #report-content { margin: 40px 0; padding: 50px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
-        }
+        a.addEventListener('click', (e) => {
+          e.preventDefault();
+          document.getElementById(h.id).scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
 
-        h1 { font-family: 'Playfair Display', serif; font-size: 1.8rem; border-bottom: 2px solid #000; padding-bottom: 10px; }
-        h2 { font-family: 'Playfair Display', serif; color: var(--accent); font-size: 1.4rem; }
-        h3 { font-family: 'Playfair Display', serif; border-bottom: 1px solid #ddd; margin-top: 30px; font-size: 1.2rem; }
-        p, li { line-height: 1.6; font-size: 1rem; }
+        toc.appendChild(a);
+      });
 
-        .grid-2 { display: grid; grid-template-columns: 1fr; gap: 20px; }
-        @media (min-width: 768px) { .grid-2 { grid-template-columns: 1fr 1fr; } }
+      const links = Array.from(toc.querySelectorAll('a'));
+      const obs = new IntersectionObserver((entries) => {
+        entries.forEach(en => {
+          if (!en.isIntersecting) return;
+          const id = en.target.id;
+          links.forEach(l => l.classList.toggle('active', l.getAttribute('href') === `#${id}`));
+        });
+      }, { root: null, rootMargin: '-20% 0px -70% 0px', threshold: 0.01 });
 
-        .executive-summary { background: #f9f9f9; padding: 15px; border-left: 4px solid var(--accent); }
-        .step { margin-bottom: 20px; display: flex; gap: 15px; }
-        .step-num { font-family: 'Playfair Display'; font-size: 1.5rem; color: var(--accent); font-weight: bold; }
+      headings.forEach(h => obs.observe(h));
+    }
+    buildTOC();
 
-        /* --- ESTILOS PESTEL --- */
-        .pestel-container { margin-bottom: 40px; border: 1px solid #ddd; padding: 20px; background: #fff; border-radius: 4px; }
-        .pestel-title { margin-top: 0; color: #444; border-bottom: 2px solid #ddd; font-size: 1rem; text-transform: uppercase; letter-spacing: 1px; }
-        .pestel-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 15px; }
-        @media (min-width: 768px) { .pestel-grid { grid-template-columns: 1fr 1fr 1fr; } }
-        
-        .p-item { font-size: 0.85rem; background: #fdfdfd; padding: 10px; border-left: 3px solid #888; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
-        .p-item:nth-child(1) { border-color: #e74c3c; } /* P */
-        .p-item:nth-child(2) { border-color: #f1c40f; } /* E */
-        .p-item:nth-child(3) { border-color: #3498db; } /* S */
-        .p-item:nth-child(4) { border-color: #9b59b6; } /* T */
-        .p-item:nth-child(5) { border-color: #2ecc71; } /* E */
-        .p-item:nth-child(6) { border-color: #34495e; } /* L */
-        
-        .pestel-synthesis { margin-top: 20px; font-style: italic; color: #666; font-size: 0.9rem; border-top: 1px dotted #ccc; padding-top: 10px; }
+    // PDF fiel a pantalla: captura layout completo
+    async function downloadPDF() {
+      const capture = document.getElementById('pdf-capture');
+      const w = capture.scrollWidth;
+      const h = capture.scrollHeight;
 
-    </style>
+      const opt = {
+        filename: 'Estrategia_Sistemica.pdf',
+        margin: [0, 0, 0, 0],
+        pagebreak: { mode: ['css', 'legacy'] },
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: {
+          scale: 2,
+          useCORS: true,
+          backgroundColor: null,
+          windowWidth: w,
+          windowHeight: h,
+          scrollX: 0,
+          scrollY: 0,
+          onclone: (doc) => {
+            doc.documentElement.classList.add('pdf-mode');
+            const tb = doc.querySelector('.topbar');
+            if (tb) tb.style.display = 'none';
+          }
+        },
+        jsPDF: { unit: 'mm', format: 'a4', orientation: 'landscape' }
+      };
+
+      await html2pdf().set(opt).from(capture).save();
+    }
+
+    // HTML fiel a pantalla: exporta un HTML standalone (mismos estilos y estructura)
+    function downloadHTML() {
+      const capture = document.getElementById('pdf-capture').cloneNode(true);
+
+      // Construimos un documento completo con los mismos estilos embebidos
+      const css = Array.from(document.querySelectorAll('style'))
+        .map(s => s.textContent || '')
+        .join('\n\n');
+
+      const fontLinks = Array.from(document.querySelectorAll('link[rel="stylesheet"]'))
+        .map(l => l.outerHTML)
+        .join('\n');
+
+      // Importante: eliminar cualquier estado "active" de TOC y reconstruirlo al abrir
+      // para que el HTML descargado sea navegable igual.
+      const html = `<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Informe Estratégico (Export)</title>
+${fontLinks}
+<style>${css}</style>
 </head>
 <body>
-    <div class="controls" data-html2canvas-ignore="true">
-        <a href="/" class="btn">← Volver</a>
-        <button onclick="readReport()" class="btn">🔊 Leer</button>
-        <button onclick="downloadPDF()" class="btn btn-accent">Descargar PDF</button>
-    </div>
+${document.querySelector('.topbar').outerHTML}
+${capture.outerHTML}
+<script>
+  // Recalcular fechas en el archivo exportado
+  const now = new Date().toLocaleDateString('es-ES', { year:'numeric', month:'long', day:'2-digit' });
+  const d = document.getElementById('date'); if (d) d.innerText = now.toUpperCase();
+  const sd = document.getElementById('side-date'); if (sd) sd.innerText = now;
 
-    <div id="report-content">
-        <div style="font-size: 0.7rem; color: #888; text-transform: uppercase; display: flex; justify-content: space-between;">
-            <span>Confidencial</span><span id="date"></span>
-        </div>
-        
-        <h1>Informe Estratégico</h1>
-        {{ report | safe }}
+  // Rebuild TOC igual que en la app
+  function slugify(s) {
+    return s.toLowerCase()
+      .normalize('NFD').replace(/[\\u0300-\\u036f]/g, '')
+      .replace(/[^a-z0-9\\s-]/g, '')
+      .trim()
+      .replace(/\\s+/g, '-')
+      .replace(/-+/g, '-');
+  }
 
-        <div style="margin-top: 40px; border-top: 1px solid #eee; padding-top: 20px; text-align: center; font-size: 0.7rem; color: #aaa;">
-            Urbina & Meadows Systemic Engine | PESTEL Module
-        </div>
-    </div>
+  function buildTOC() {
+    const root = document.getElementById('report-content');
+    const toc = document.getElementById('toc');
+    if (!root || !toc) return;
+    toc.innerHTML = '';
+    const headings = root.querySelectorAll('article h2, article h3, article h4, h2, h3, h4');
+    const seen = new Set();
+    headings.forEach(h => {
+      const text = (h.textContent || '').trim();
+      if (!text) return;
+      if (!h.id) {
+        let base = slugify(text);
+        let id = base;
+        let i = 2;
+        while (seen.has(id) || document.getElementById(id)) id = \`\${base}-\${i++}\`;
+        h.id = id;
+        seen.add(id);
+      }
+      const a = document.createElement('a');
+      a.href = \`#\${h.id}\`;
+      a.textContent = text;
+      if (h.tagName === 'H2') a.classList.add('lvl-h2');
+      if (h.tagName === 'H3') a.classList.add('lvl-h3');
+      if (h.tagName === 'H4') a.classList.add('lvl-h4');
+      a.addEventListener('click', (e) => {
+        e.preventDefault();
+        document.getElementById(h.id).scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+      toc.appendChild(a);
+    });
 
-    <script>
-        document.getElementById('date').innerText = new Date().toLocaleDateString();
-        function readReport() {
-            window.speechSynthesis.cancel();
-            const u = new SpeechSynthesisUtterance(document.getElementById('report-content').innerText);
-            u.lang = 'es-ES'; window.speechSynthesis.speak(u);
-        }
-        function downloadPDF() {
-            const opt = {
-                margin: [10, 10], filename: 'Estrategia_Sistemica.pdf',
-                image: { type: 'jpeg', quality: 0.98 },
-                html2canvas: { scale: 2, useCORS: true },
-                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-            };
-            html2pdf().set(opt).from(document.getElementById('report-content')).save();
-        }
-    </script>
+    const links = Array.from(toc.querySelectorAll('a'));
+    const obs = new IntersectionObserver((entries) => {
+      entries.forEach(en => {
+        if (!en.isIntersecting) return;
+        const id = en.target.id;
+        links.forEach(l => l.classList.toggle('active', l.getAttribute('href') === \`#\${id}\`));
+      });
+    }, { root: null, rootMargin: '-20% 0px -70% 0px', threshold: 0.01 });
+
+    headings.forEach(h => obs.observe(h));
+  }
+  buildTOC();
+
+  // Botones del topbar en export:
+  function readReport() {
+    window.speechSynthesis.cancel();
+    const txt = document.getElementById('report-content')?.innerText || '';
+    const u = new SpeechSynthesisUtterance(txt);
+    u.lang = 'es-ES';
+    window.speechSynthesis.speak(u);
+  }
+  async function copyLink() {
+    try { await navigator.clipboard.writeText(window.location.href); } catch(e){}
+  }
+
+  // En el export, “Descargar PDF/HTML” no aplica (ya es un archivo).
+  // Ocultamos esos botones para evitar confusión.
+  const tb = document.querySelector('.topbar');
+  if (tb) {
+    tb.querySelectorAll('button').forEach(b => {
+      const t = (b.textContent || '').toLowerCase();
+      if (t.includes('descargar pdf') || t.includes('descargar html')) b.style.display = 'none';
+    });
+  }
+<\/script>
+</body>
+</html>`;
+
+      const blob = new Blob([html], { type: 'text/html;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'Informe_Estrategico.html';
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+
+      setTimeout(() => URL.revokeObjectURL(url), 1500);
+    }
+  </script>
 </body>
 </html>
+
+
+
+
