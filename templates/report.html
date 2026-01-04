@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Informe Estratégico</title>
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    
+    <style>
+        :root { --primary: #111; --accent: #8e1600; --bg: #f3f4f6; --paper: #fff; }
+
+        body {
+            background-color: var(--bg);
+            font-family: 'Lato', sans-serif;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .controls {
+            position: fixed; bottom: 0; left: 0; width: 100%;
+            background: #1a1a1a; padding: 15px;
+            display: flex; justify-content: space-around;
+            z-index: 1000; box-shadow: 0 -4px 10px rgba(0,0,0,0.2);
+        }
+        @media (min-width: 768px) {
+            .controls {
+                top: 20px; bottom: auto; left: auto; right: 20px; width: auto;
+                background: transparent; box-shadow: none; gap: 10px; padding: 0;
+            }
+        }
+
+        .btn {
+            background: #333; color: #fff; border: none; padding: 12px 20px;
+            border-radius: 4px; font-weight: bold; text-decoration: none;
+            font-size: 0.9rem; cursor: pointer;
+        }
+        .btn-accent { background: var(--accent); }
+
+        #report-content {
+            background: var(--paper);
+            width: 100%; max-width: 800px;
+            margin-bottom: 80px; padding: 30px 20px;
+            box-sizing: border-box;
+        }
+        @media (min-width: 768px) {
+            #report-content { margin: 40px 0; padding: 50px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+        }
+
+        h1 { font-family: 'Playfair Display', serif; font-size: 1.8rem; border-bottom: 2px solid #000; padding-bottom: 10px; }
+        h2 { font-family: 'Playfair Display', serif; color: var(--accent); font-size: 1.4rem; }
+        h3 { font-family: 'Playfair Display', serif; border-bottom: 1px solid #ddd; margin-top: 30px; font-size: 1.2rem; }
+        p, li { line-height: 1.6; font-size: 1rem; }
+
+        .grid-2 { display: grid; grid-template-columns: 1fr; gap: 20px; }
+        @media (min-width: 768px) { .grid-2 { grid-template-columns: 1fr 1fr; } }
+
+        .executive-summary { background: #f9f9f9; padding: 15px; border-left: 4px solid var(--accent); }
+        .step { margin-bottom: 20px; display: flex; gap: 15px; }
+        .step-num { font-family: 'Playfair Display'; font-size: 1.5rem; color: var(--accent); font-weight: bold; }
+    </style>
+</head>
+<body>
+    <div class="controls" data-html2canvas-ignore="true">
+        <a href="/" class="btn">← Volver</a>
+        <button onclick="readReport()" class="btn">🔊 Leer</button>
+        <button onclick="downloadPDF()" class="btn btn-accent">Descargar PDF</button>
+    </div>
+
+    <div id="report-content">
+        <div style="font-size: 0.7rem; color: #888; text-transform: uppercase; display: flex; justify-content: space-between;">
+            <span>Confidencial</span><span id="date"></span>
+        </div>
+        
+        <h1>Informe Estratégico</h1>
+        {{ report | safe }}
+
+        <div style="margin-top: 40px; border-top: 1px solid #eee; padding-top: 20px; text-align: center; font-size: 0.7rem; color: #aaa;">
+            Urbina & Meadows Systemic Engine
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('date').innerText = new Date().toLocaleDateString();
+        function readReport() {
+            window.speechSynthesis.cancel();
+            const u = new SpeechSynthesisUtterance(document.getElementById('report-content').innerText);
+            u.lang = 'es-ES'; window.speechSynthesis.speak(u);
+        }
+        function downloadPDF() {
+            const opt = {
+                margin: [10, 10], filename: 'Estrategia.pdf',
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2, useCORS: true },
+                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            };
+            html2pdf().set(opt).from(document.getElementById('report-content')).save();
+        }
+    </script>
+</body>
+</html>
