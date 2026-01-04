@@ -1,9 +1,11 @@
-# ETAPA 1: Builder (Actualizado a 1.84 para soportar Cargo.lock v4)
+# ETAPA 1: Builder (Rust 1.84 para compatibilidad)
 FROM rust:1.84-slim-bookworm as builder
 
-# Instalar dependencias de compilación para C++ (pdf-extract necesita esto)
+# Instalar dependencias del sistema necesarias
+# AÑADIDO: libssl-dev (CRÍTICO para reqwest/openssl)
 RUN apt-get update && apt-get install -y \
     pkg-config \
+    libssl-dev \
     libpoppler-glib-dev \
     libglib2.0-dev \
     libc6-dev \
@@ -27,7 +29,9 @@ RUN cargo build --release
 FROM debian:bookworm-slim
 
 # Instalar dependencias de ejecución
+# AÑADIDO: libssl3 (o openssl) para que funcione el binario compilado
 RUN apt-get update && apt-get install -y \
+    libssl3 \
     libpoppler-glib8 \
     libglib2.0-0 \
     ca-certificates \
