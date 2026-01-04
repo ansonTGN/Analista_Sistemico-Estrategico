@@ -1,5 +1,5 @@
-# ETAPA 1: Builder
-FROM rust:1.75-slim-bookworm as builder
+# ETAPA 1: Builder (Actualizado a 1.84 para soportar Cargo.lock v4)
+FROM rust:1.84-slim-bookworm as builder
 
 # Instalar dependencias de compilación para C++ (pdf-extract necesita esto)
 RUN apt-get update && apt-get install -y \
@@ -19,6 +19,7 @@ RUN cargo build --release
 # Copiar el código real y compilar
 COPY src ./src
 COPY templates ./templates
+# "Tocamos" el main para forzar a cargo a recompilar el código real
 RUN touch src/main.rs
 RUN cargo build --release
 
