@@ -17,6 +17,8 @@ uuid = { version = "1.4", features = ["v4"] }
 dotext = "0.1"
 pdf-extract = "0.7"
 
-# --- FIX CRITICO ---
-# Forzamos una versión estable de 'ignore' para evitar el error de 'edition2024'
+# --- CORRECCIONES DE EMERGENCIA (NO BORRAR) ---
+# Estas librerías se han actualizado a una versión que rompe Rust estable.
+# Las forzamos a versiones anteriores que funcionan bien.
 ignore = "=0.4.22"
+globset = "=0.4.15"
