@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Urbina & Meadows | Mobile Core</title>
+    <title>Urbina & Meadows | Strategic Core</title>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -78,7 +78,7 @@
             border-radius: 4px;
             box-sizing: border-box;
             font-family: 'Inter', sans-serif;
-            font-size: 16px; /* Evita zoom en iOS */
+            font-size: 16px;
         }
 
         button.submit-btn {
@@ -95,6 +95,30 @@
             border-radius: 4px;
         }
 
+        /* --- ESTILOS DE METODOLOGÍA --- */
+        .methodology-badge {
+            display: inline-block;
+            background: rgba(212, 175, 55, 0.1);
+            border: 1px solid var(--accent);
+            color: var(--accent);
+            padding: 2px 6px;
+            font-size: 0.6rem;
+            border-radius: 4px;
+            margin-left: 10px;
+            vertical-align: middle;
+            letter-spacing: 1px;
+        }
+        .pestel-indicators {
+            display: flex; gap: 6px; margin-top: 5px; opacity: 0.7; margin-bottom: 15px;
+        }
+        .p-dot { 
+            width: 8px; height: 8px; 
+            background-color: var(--accent); 
+            border-radius: 50%; 
+            display: inline-block;
+            box-shadow: 0 0 5px var(--accent);
+        }
+
         #loader {
             display: none;
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
@@ -104,6 +128,7 @@
         }
         .spinner { width: 40px; height: 40px; border: 3px solid #333; border-top: 3px solid var(--accent); border-radius: 50%; animation: spin 1s infinite linear; }
         @keyframes spin { 100% { transform: rotate(360deg); } }
+
     </style>
     <script>
         function switchTab(groupName, mode) {
@@ -125,8 +150,20 @@
         <div class="form-card">
             <form action="/analyze" method="post" enctype="multipart/form-data" onsubmit="document.getElementById('loader').style.display='flex'">
                 
-                <label>I. Contexto Operativo</label>
-                <div class="hint">Admite: PDF, DOCX, TXT</div>
+                <label>
+                    I. Contexto Operativo
+                    <span class="methodology-badge">FILTRO PESTEL ACTIVO</span>
+                </label>
+                <div class="pestel-indicators">
+                    <span class="p-dot" title="Político"></span>
+                    <span class="p-dot" title="Económico"></span>
+                    <span class="p-dot" title="Social"></span>
+                    <span class="p-dot" title="Tecnológico"></span>
+                    <span class="p-dot" title="Ambiental"></span>
+                    <span class="p-dot" title="Legal"></span>
+                </div>
+                <div class="hint">Admite: PDF, DOCX, TXT. El sistema descompondrá sus datos en la matriz de entorno.</div>
+                
                 <div class="tabs">
                     <div id="sit-btn-text" class="tab-btn active" onclick="switchTab('sit', 'text')">Escribir</div>
                     <div id="sit-btn-file" class="tab-btn" onclick="switchTab('sit', 'file')">Subir Archivo</div>
@@ -153,7 +190,7 @@
                 <label>III. Foco Estratégico (Opcional)</label>
                 <textarea name="extra_questions" rows="2" placeholder="¿Dudas concretas?"></textarea>
 
-                <button type="submit" class="submit-btn">ANALIZAR ESTRATEGIA</button>
+                <button type="submit" class="submit-btn">INICIAR SECUENCIA DE ANÁLISIS</button>
             </form>
         </div>
     </div>

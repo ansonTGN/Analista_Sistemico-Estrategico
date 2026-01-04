@@ -1,6 +1,6 @@
 [package]
 name = "analista_sistemico"
-version = "0.2.0"
+version = "0.2.1"
 edition = "2021"
 
 [dependencies]
@@ -16,11 +16,8 @@ uuid = { version = "1.4", features = ["v4"] }
 dotext = "0.1"
 pdf-extract = "0.7"
 
-# --- CORRECCIONES DE ESTABILIDAD ---
-
-# 1. Tera: La v1.20.1 pide Rust 1.85. Forzamos la v1.19.1 que es estable.
+# --- VERSIONES CONGELADAS POR ESTABILIDAD ---
+# Soluciona conflicto de Rust 1.85 y edition2024
 tera = "=1.19.1"
-
-# 2. Dependencias rotas por "edition2024":
 ignore = "=0.4.22"
 globset = "=0.4.15"

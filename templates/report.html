@@ -62,6 +62,23 @@
         .executive-summary { background: #f9f9f9; padding: 15px; border-left: 4px solid var(--accent); }
         .step { margin-bottom: 20px; display: flex; gap: 15px; }
         .step-num { font-family: 'Playfair Display'; font-size: 1.5rem; color: var(--accent); font-weight: bold; }
+
+        /* --- ESTILOS PESTEL --- */
+        .pestel-container { margin-bottom: 40px; border: 1px solid #ddd; padding: 20px; background: #fff; border-radius: 4px; }
+        .pestel-title { margin-top: 0; color: #444; border-bottom: 2px solid #ddd; font-size: 1rem; text-transform: uppercase; letter-spacing: 1px; }
+        .pestel-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 15px; }
+        @media (min-width: 768px) { .pestel-grid { grid-template-columns: 1fr 1fr 1fr; } }
+        
+        .p-item { font-size: 0.85rem; background: #fdfdfd; padding: 10px; border-left: 3px solid #888; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        .p-item:nth-child(1) { border-color: #e74c3c; } /* P */
+        .p-item:nth-child(2) { border-color: #f1c40f; } /* E */
+        .p-item:nth-child(3) { border-color: #3498db; } /* S */
+        .p-item:nth-child(4) { border-color: #9b59b6; } /* T */
+        .p-item:nth-child(5) { border-color: #2ecc71; } /* E */
+        .p-item:nth-child(6) { border-color: #34495e; } /* L */
+        
+        .pestel-synthesis { margin-top: 20px; font-style: italic; color: #666; font-size: 0.9rem; border-top: 1px dotted #ccc; padding-top: 10px; }
+
     </style>
 </head>
 <body>
@@ -80,7 +97,7 @@
         {{ report | safe }}
 
         <div style="margin-top: 40px; border-top: 1px solid #eee; padding-top: 20px; text-align: center; font-size: 0.7rem; color: #aaa;">
-            Urbina & Meadows Systemic Engine
+            Urbina & Meadows Systemic Engine | PESTEL Module
         </div>
     </div>
 
@@ -93,7 +110,7 @@
         }
         function downloadPDF() {
             const opt = {
-                margin: [10, 10], filename: 'Estrategia.pdf',
+                margin: [10, 10], filename: 'Estrategia_Sistemica.pdf',
                 image: { type: 'jpeg', quality: 0.98 },
                 html2canvas: { scale: 2, useCORS: true },
                 jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }

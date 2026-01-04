@@ -7,7 +7,7 @@ use reqwest::Client;
 use dotenv::dotenv;
 use std::env;
 use std::io::Write;
-use std::io::Read; // Necesario para dotext
+use std::io::Read; // <--- IMPRESCINDIBLE PARA LEER DOCX
 use std::fs;
 use dotext::MsDoc;
 
@@ -34,24 +34,44 @@ struct Choice {
     message: Message,
 }
 
+// --- CEREBRO METODOLÓGICO: PESTEL + MEADOWS + URBINA ---
 const SYSTEM_PROMPT: &str = r#"
 # ROL
 Eres el Arquitecto Estratégico Personal del usuario (Consultor Sistémico de Élite).
-Marco: Ingeniería de Sistemas (Meadows) + Psicología del Poder (Urbina).
+Tu metodología es secuencial y estricta:
+1. **Filtro PESTEL:** Descomposición macroambiental de la situación.
+2. **Ingeniería de Sistemas (Meadows):** Análisis de flujos y bucles sobre los datos del PESTEL.
+3. **Psicología del Poder (Urbina):** Evaluación del perfil del agente en ese entorno.
 
 # OBJETIVO
-Analiza los datos adjuntos (Contexto y CV). Háblale al usuario de "TÚ". Sé directo, empoderador pero brutalmente honesto.
+Analiza los datos. Háblale al usuario de "TÚ". Sé directo y estratégico.
 
 # FORMATO DE SALIDA (HTML RESPONSIVO)
-Genera SOLO el contenido HTML dentro de etiquetas <article>.
-Estructura obligatoria:
+Genera SOLO el contenido HTML dentro de etiquetas <article>. No uses markdown.
+Sigue esta estructura EXACTA:
 
 <article>
+    <!-- FASE 1: PRE-PROCESAMIENTO PESTEL -->
+    <section class="pestel-container">
+        <h3 class="pestel-title">I. Matriz de Entorno (Filtro PESTEL)</h3>
+        <div class="pestel-grid">
+            <div class="p-item"><strong>(P)olítico:</strong> [Factor de poder clave o N/A]</div>
+            <div class="p-item"><strong>(E)conómico:</strong> [Factor de recursos clave o N/A]</div>
+            <div class="p-item"><strong>(S)ocial:</strong> [Factor cultural/humano clave o N/A]</div>
+            <div class="p-item"><strong>(T)ecnológico:</strong> [Factor técnico clave o N/A]</div>
+            <div class="p-item"><strong>(A)mbiental:</strong> [Factor de entorno clave o N/A]</div>
+            <div class="p-item"><strong>(L)egal:</strong> [Factor normativo clave o N/A]</div>
+        </div>
+        <p class="pestel-synthesis">[Síntesis: ¿Cómo presionan estos factores externos al sistema interno?]</p>
+    </section>
+
+    <!-- FASE 2: DICTAMEN -->
     <div class="executive-summary">
-        <h2>Dictamen Estratégico</h2>
-        <p class="highlight">[Veredicto en 2 frases]</p>
+        <h2>II. Dictamen Estratégico</h2>
+        <p class="highlight">[Veredicto directo basado en el cruce PESTEL + Perfil]</p>
     </div>
 
+    <!-- FASE 3: ANÁLISIS MEADOWS/URBINA -->
     <section class="grid-2">
         <div class="card">
             <h3>Tu Arquitectura Mental</h3>
@@ -62,32 +82,33 @@ Estructura obligatoria:
             </ul>
         </div>
         <div class="card">
-            <h3>El Campo de Batalla</h3>
+            <h3>Dinámica del Sistema</h3>
             <ul>
-                <li><strong>Trampa:</strong> [Arquetipo sistémico]</li>
-                <li><strong>Fricción:</strong> [Choque Perfil vs Sistema]</li>
+                <li><strong>Arquetipo:</strong> [Nombre del patrón sistémico]</li>
+                <li><strong>Stock Crítico:</strong> [Qué recurso se agota]</li>
             </ul>
         </div>
     </section>
 
     <section class="deep-dive">
         <h3>Análisis de Viabilidad</h3>
-        <p>[Análisis denso y profundo]</p>
+        <p>[Análisis profundo cruzando los factores PESTEL con la capacidad del usuario. Menciona bucles de retroalimentación.]</p>
     </section>
 
+    <!-- FASE 4: ACCIÓN -->
     <section class="roadmap">
-        <h3>Tu Plan de Maniobra</h3>
+        <h3>III. Plan de Maniobra</h3>
         <div class="step">
-            <span class="step-num">I</span>
-            <div class="step-content"><strong>Inmediato:</strong> <p>[Acción]</p></div>
+            <span class="step-num">01</span>
+            <div class="step-content"><strong>Inmediato:</strong> <p>[Acción de contención]</p></div>
         </div>
         <div class="step">
-            <span class="step-num">II</span>
-            <div class="step-content"><strong>Estructural:</strong> <p>[Acción]</p></div>
+            <span class="step-num">02</span>
+            <div class="step-content"><strong>Estructural:</strong> <p>[Acción de cambio de reglas]</p></div>
         </div>
          <div class="step">
-            <span class="step-num">III</span>
-            <div class="step-content"><strong>Mentalidad:</strong> <p>[Acción]</p></div>
+            <span class="step-num">03</span>
+            <div class="step-content"><strong>Mentalidad:</strong> <p>[Acción de cambio de paradigma]</p></div>
         </div>
     </section>
 </article>
@@ -106,6 +127,7 @@ fn extract_text_from_file(filepath: &str, extension: &str) -> String {
         "docx" => {
             let mut content = String::new();
             if let Ok(mut doc) = dotext::Docx::open(filepath) {
+                // Leemos el contenido usando el trait Read
                 let _ = doc.read_to_string(&mut content);
             }
             if content.is_empty() { "No se pudo leer DOCX o está vacío".to_string() } else { content }
@@ -125,19 +147,17 @@ async fn analyze(
     client: web::Data<Client>,
 ) -> impl Responder {
     
-    // Obtener API Key de entorno (Render inyecta esto)
     let api_key = env::var("OPENAI_API_KEY").unwrap_or_default();
     
     let mut situation_text = String::new();
     let mut cv_text = String::new();
     let mut questions_text = String::new();
 
-    // Crear carpeta temporal si no existe (importante para Docker)
     let _ = fs::create_dir_all("/tmp");
 
     while let Ok(Some(mut field)) = payload.try_next().await {
         
-        // 1. Extraer metadatos y liberar el borrow
+        // 1. Extraer metadatos
         let (name, filename) = {
             let cd = field.content_disposition();
             let n = cd.get_name().unwrap_or("").to_string();
@@ -145,14 +165,12 @@ async fn analyze(
             (n, f)
         }; 
 
-        // 2. Procesar contenido
+        // 2. Procesar
         if let Some(fname) = filename {
             if !fname.is_empty() {
-                // Es un archivo
                 let uuid = uuid::Uuid::new_v4();
                 let temp_path = format!("/tmp/{}", uuid);
                 
-                // Guardar archivo
                 if let Ok(mut f) = fs::File::create(&temp_path) {
                      while let Some(chunk) = field.next().await {
                         if let Ok(data) = chunk {
@@ -161,7 +179,6 @@ async fn analyze(
                     }
                 }
 
-                // Extraer texto
                 let ext = fname.split('.').last().unwrap_or("").to_lowercase();
                 let extracted = extract_text_from_file(&temp_path, &ext);
                 
@@ -170,11 +187,9 @@ async fn analyze(
                     "cv_file" => cv_text.push_str(&format!("\n[ARCHIVO CV]:\n{}", extracted)),
                     _ => {}
                 }
-                
                 let _ = fs::remove_file(temp_path);
             }
         } else {
-            // Es texto plano del formulario
             let mut value = Vec::new();
             while let Some(chunk) = field.next().await {
                 if let Ok(data) = chunk {
@@ -192,16 +207,15 @@ async fn analyze(
         }
     }
 
-    // Comprobación de seguridad API Key
     if api_key.len() < 5 {
-        let err_html = "<div class='executive-summary' style='border-left-color:red'><h2>Error de Configuración</h2><p>Falta la variable OPENAI_API_KEY en Render.</p></div>";
+        let err_html = "<div class='executive-summary' style='border-left-color:red'><h2>Error de Configuración</h2><p>Falta la variable OPENAI_API_KEY en el servidor.</p></div>";
         let mut ctx = Context::new();
         ctx.insert("report", err_html);
         return HttpResponse::Ok().content_type("text/html").body(tera.render("report.html", &ctx).unwrap());
     }
 
     let user_prompt = format!(
-        "--- SITUACIÓN ---\n{}\n\n--- PERFIL (CV) ---\n{}\n\n--- DUDAS ---\n{}",
+        "--- SITUACIÓN (A procesar por PESTEL) ---\n{}\n\n--- PERFIL (CV) ---\n{}\n\n--- DUDAS ---\n{}",
         situation_text, cv_text, questions_text
     );
 
@@ -223,7 +237,7 @@ async fn analyze(
     match response {
         Ok(resp) => {
             let json: OpenAIResponse = resp.json().await.unwrap_or_default();
-            let content = json.choices.first().map(|c| c.message.content.clone()).unwrap_or("<p>Error: La IA no devolvió contenido.</p>".into());
+            let content = json.choices.first().map(|c| c.message.content.clone()).unwrap_or("<p>Error: La IA no devolvió contenido válido.</p>".into());
             
             let mut context = Context::new();
             context.insert("report", &content);
@@ -249,7 +263,6 @@ async fn main() -> std::io::Result<()> {
     let client = Client::new();
     let _ = fs::create_dir_all("/tmp");
 
-    // LÓGICA DE PUERTO PARA RENDER
     let port_str = env::var("PORT").unwrap_or_else(|_| "8080".to_string());
     let port: u16 = port_str.parse().expect("PORT debe ser un número");
 
