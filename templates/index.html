@@ -12,9 +12,14 @@
         }
         body { background-color: var(--bg); font-family: 'Inter', sans-serif; color: var(--text); margin: 0; padding: 15px; }
         .container { max-width: 900px; margin: 0 auto; }
+        
         .header-actions { display: flex; justify-content: space-between; margin-bottom: 20px; align-items: center; }
         .back-link { color: var(--muted); text-decoration: none; font-size: 0.9rem; }
-        .action-btn { background: rgba(30, 41, 59, 0.5); border: 1px solid #334155; color: #94a3b8; padding: 10px 14px; border-radius: 6px; cursor: pointer; }
+        .header-right { display: flex; gap: 10px; }
+        
+        .action-btn { background: rgba(30, 41, 59, 0.5); border: 1px solid #334155; color: #94a3b8; padding: 10px 14px; border-radius: 6px; cursor: pointer; font-family: 'Inter', sans-serif; }
+        .help-btn { border-color: var(--accent); color: var(--accent); font-weight: bold; background: rgba(212, 175, 55, 0.1); }
+        
         h1 { font-family: 'Cinzel', serif; color: var(--accent); font-size: 1.6rem; text-align: center; margin: 0; }
         .subtitle { text-align: center; font-size: 0.7rem; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); margin-bottom: 18px; }
         
@@ -38,30 +43,40 @@
         
         .grid-2 { display: grid; grid-template-columns: 1fr; gap: 15px; }
         
-        /* Ajuste de escala para 10 items */
-        .scale-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 10px; }
+        /* SCALES */
+        .scale-legend { display: flex; justify-content: space-between; font-size: 0.75rem; color: #94a3b8; margin-bottom: 8px; background: rgba(0,0,0,0.2); padding: 8px; border-radius: 6px; }
+        .scale-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 5px; }
         .scale-item { border: 1px solid #223049; border-radius: 8px; padding: 10px; background: rgba(15,23,42,0.35); }
-        .scale-item .title { font-size: 0.75rem; font-weight: 600; color: #cbd5e1; margin-bottom: 4px; text-transform: uppercase; height: 28px; display:flex; align-items:end; }
-        .scale-item select { padding: 6px; font-size: 0.9rem; }
+        .scale-item .title { font-size: 0.75rem; font-weight: 600; color: #cbd5e1; margin-bottom: 4px; text-transform: uppercase; display:flex; align-items:end; min-height: 20px; }
         
+        @media (min-width: 860px) { 
+            .grid-2 { grid-template-columns: 1fr 1fr; } 
+            .scale-grid { grid-template-columns: 1fr 1fr 1fr 1fr 1fr; }
+        }
+        
+        /* MODAL */
+        #help-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 3000; padding: 20px; overflow-y: auto; }
+        .modal-content { background: #1e293b; max-width: 800px; margin: 40px auto; padding: 30px; border-radius: 12px; border: 1px solid var(--accent); position: relative; color: #e2e8f0; }
+        .close-modal { position: absolute; top: 15px; right: 20px; font-size: 2rem; cursor: pointer; color: var(--accent); }
+        .modal-content h2 { font-family: 'Cinzel', serif; color: var(--accent); margin-top: 0; border-bottom: 1px solid #334155; padding-bottom: 10px; }
+        .modal-content h3 { color: #f1f5f9; margin-top: 25px; font-size: 1.1rem; }
+        .modal-content p, .modal-content li { font-size: 0.95rem; line-height: 1.6; color: #cbd5e1; }
+        .modal-content ul { padding-left: 20px; }
+        .biblio-item { font-size: 0.85rem; color: #94a3b8; margin-bottom: 8px; }
+
         button.submit-btn { margin-top: 25px; width: 100%; padding: 18px; background: var(--accent); color: var(--bg); border: none; font-family: 'Cinzel', serif; font-weight: bold; font-size: 1rem; cursor: pointer; border-radius: 12px; }
         
         .rec-controls { display: flex; gap: 10px; align-items: center; margin-top: 10px; }
         .rec-btn { background: #ef4444; color: white; border: none; padding: 8px 16px; border-radius: 20px; cursor: pointer; font-weight: bold; }
         .rec-btn.recording { animation: pulse 1.5s infinite; }
-        .audio-status { font-size: 0.8rem; color: var(--accent); }
         @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
-        
-        @media (min-width: 860px) { 
-            .grid-2 { grid-template-columns: 1fr 1fr; } 
-            .scale-grid { grid-template-columns: 1fr 1fr 1fr 1fr 1fr; } /* 5 columnas en PC */
-        }
         
         #loader { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(10,14,23,0.95); z-index: 2000; justify-content: center; align-items: center; flex-direction: column; text-align: center; }
         .spinner { width: 44px; height: 44px; border: 3px solid #333; border-top: 3px solid var(--accent); border-radius: 50%; animation: spin 1s infinite linear; }
         @keyframes spin { 100% { transform: rotate(360deg); } }
     </style>
     <script>
+        // ... (Funciones switchTab, switchMode, toggleRecord iguales que antes)
         function switchTab(group, mode) {
             document.getElementById(group+'-text').classList.toggle('active', mode==='text');
             document.getElementById(group+'-file').classList.toggle('active', mode==='file');
@@ -88,12 +103,11 @@
 
         let mediaRecorder;
         let audioChunks = [];
-        
         async function toggleRecord(groupId) {
+            // (Misma lógica que antes)
             const btn = document.getElementById(groupId + '-rec-btn');
             const status = document.getElementById(groupId + '-status');
             const input = document.getElementById(groupId + '-audio-file');
-
             if (btn.classList.contains('recording')) {
                 mediaRecorder.stop();
                 btn.classList.remove('recording');
@@ -116,18 +130,108 @@
                     btn.classList.add('recording');
                     btn.innerHTML = "{{ t.rec_stop }}";
                     status.innerText = "Rec...";
-                } catch (err) {
-                    alert("Mic Error: " + err.message);
-                }
+                } catch (err) { alert("Mic Error: " + err.message); }
             }
+        }
+
+        function toggleHelp() {
+            const modal = document.getElementById('help-modal');
+            modal.style.display = (modal.style.display === 'block') ? 'none' : 'block';
+        }
+        
+        window.onclick = function(event) {
+            const modal = document.getElementById('help-modal');
+            if (event.target == modal) { modal.style.display = "none"; }
         }
     </script>
 </head>
 <body onload="switchMode('motors')">
+    <!-- MODAL DE AYUDA -->
+    <div id="help-modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="toggleHelp()">&times;</span>
+            
+            {% if lang == 'es' %}
+            <h2>Guía de Inteligencia Operativa</h2>
+            
+            <h3>1. Uso de la Herramienta</h3>
+            <p>Este sistema no es un "chat". Es un motor de estructuración. Para obtener resultados útiles:</p>
+            <ul>
+                <li><strong>Contexto:</strong> No diga "hay problemas". Diga "El presupuesto se ha cortado un 20% y el equipo teme despidos".</li>
+                <li><strong>Observaciones:</strong> Use hechos conductuales ("Gritó en la reunión", "Calla cuando entra el jefe"). Evite juicios ("Es malo", "Es tóxico").</li>
+                <li><strong>Audios:</strong> Puede grabar reuniones (con permiso) o dictar sus notas desordenadas. El sistema las estructurará.</li>
+            </ul>
+
+            <h3>2. Base Científica (Human Motors)</h3>
+            <p>El análisis se basa en la <strong>Teoría de la Autodeterminación (SDT)</strong> y la <strong>Justicia Organizacional</strong>:</p>
+            <ul>
+                <li><strong>Autonomía:</strong> Necesidad de control sobre las propias acciones.</li>
+                <li><strong>Competencia (Maestría):</strong> Necesidad de sentirse eficaz y crecer.</li>
+                <li><strong>Relación (Pertenencia):</strong> Necesidad de conectar con otros.</li>
+                <li><strong>Justicia Procedimental:</strong> ¿El proceso es justo aunque el resultado no lo sea?</li>
+            </ul>
+
+            <h3>3. Bibliografía Selecta</h3>
+            <div class="biblio-item">1. <strong>Edmondson, A. C.</strong> (2023). <em>Psychological Safety Comes of Age</em>. Annual Review of Organizational Psychology.</div>
+            <div class="biblio-item">2. <strong>Ryan, R. M. & Deci, E. L.</strong> (2017). <em>Self-Determination Theory</em>. Guilford Press.</div>
+            <div class="biblio-item">3. <strong>Kahneman, D.</strong> (2011). <em>Thinking, Fast and Slow</em>. (Sistemas 1 y 2).</div>
+            <div class="biblio-item">4. <strong>Heuer, R. J.</strong> (1999). <em>Psychology of Intelligence Analysis</em>. CIA Center for the Study of Intelligence.</div>
+            
+            {% elif lang == 'cat' %}
+            <h2>Guia d'Intel·ligència Operativa</h2>
+            
+            <h3>1. Ús de l'Eina</h3>
+            <p>Aquest sistema no és un "xat". És un motor d'estructuració. Per obtenir resultats útils:</p>
+            <ul>
+                <li><strong>Context:</strong> No digueu "hi ha problemes". Digueu "El pressupost s'ha tallat un 20% i l'equip tem acomiadaments".</li>
+                <li><strong>Observacions:</strong> Useu fets conductuals ("Va cridar a la reunió", "Calla quan entra el cap"). Eviteu judicis ("És dolent", "És tòxic").</li>
+            </ul>
+
+            <h3>2. Base Científica (Human Motors)</h3>
+            <p>L'anàlisi es basa en la <strong>Teoria de l'Autodeterminació (SDT)</strong> i la <strong>Justícia Organitzacional</strong>:</p>
+            <ul>
+                <li><strong>Autonomia:</strong> Necessitat de control sobre les pròpies accions.</li>
+                <li><strong>Competència (Mestratge):</strong> Necessitat de sentir-se eficaç.</li>
+                <li><strong>Relació (Pertinença):</strong> Necessitat de connectar amb altres.</li>
+            </ul>
+
+            <h3>3. Bibliografia Selecta</h3>
+            <div class="biblio-item">1. <strong>Edmondson, A. C.</strong> (2023). <em>Psychological Safety Comes of Age</em>.</div>
+            <div class="biblio-item">2. <strong>Ryan, R. M. & Deci, E. L.</strong> (2017). <em>Self-Determination Theory</em>.</div>
+            <div class="biblio-item">3. <strong>Meadows, D.</strong> (2008). <em>Thinking in Systems</em>.</div>
+
+            {% else %}
+            <h2>Operational Intelligence Guide</h2>
+            
+            <h3>1. Tool Usage</h3>
+            <p>This system is not a "chat". It is a structuring engine. To get useful results:</p>
+            <ul>
+                <li><strong>Context:</strong> Don't say "there are problems". Say "Budget was cut by 20% and the team fears layoffs".</li>
+                <li><strong>Observations:</strong> Use behavioral facts ("Yelled at the meeting", "Goes silent when boss enters"). Avoid judgments ("He is toxic").</li>
+                <li><strong>Audio:</strong> You can record meetings (with permission) or dictate unstructured notes. The system will structure them.</li>
+            </ul>
+
+            <h3>2. Scientific Basis (Human Motors)</h3>
+            <p>Analysis is based on <strong>Self-Determination Theory (SDT)</strong> and <strong>Organizational Justice</strong>:</p>
+            <ul>
+                <li><strong>Autonomy:</strong> Need to control one's own life.</li>
+                <li><strong>Competence (Mastery):</strong> Need to handle tasks effectively.</li>
+                <li><strong>Relatedness (Belonging):</strong> Need to interact/connect with others.</li>
+            </ul>
+
+            <h3>3. Selected Bibliography</h3>
+            <div class="biblio-item">1. <strong>Edmondson, A. C.</strong> (2023). <em>Psychological Safety Comes of Age</em>.</div>
+            <div class="biblio-item">2. <strong>Ryan, R. M. & Deci, E. L.</strong> (2017). <em>Self-Determination Theory</em>.</div>
+            <div class="biblio-item">3. <strong>Heuer, R. J.</strong> (1999). <em>Psychology of Intelligence Analysis</em>.</div>
+            {% endif %}
+        </div>
+    </div>
+
     <div class="container">
         <div class="header-actions">
             <a href="/" class="back-link">← Home</a>
-            <div>
+            <div class="header-right">
+                <button class="action-btn help-btn" onclick="toggleHelp()">❓ {{ t.btn_help }}</button>
                 <button class="action-btn" onclick="document.getElementById('json-upload').click()">📂 JSON</button>
                 <input type="file" id="json-upload" accept=".json" style="display:none">
             </div>
@@ -147,6 +251,7 @@
 
                 <!-- SYSTEM MODE -->
                 <div id="mode-system" class="mode-panel">
+                    <!-- ... (Igual que antes) ... -->
                     <label>{{ t.lbl_situation }}</label>
                     <div class="tabs">
                         <button type="button" id="sit-btn-text" class="tab-btn active" onclick="switchTab('sit','text')">{{ t.btn_text }}</button>
@@ -232,7 +337,15 @@
                     <label>{{ t.lbl_m_goal }}</label>
                     <textarea name="m_goal" rows="2" placeholder="{{ t.ph_m_goal }}"></textarea>
 
+                    <!-- AQUI ESTA EL CAMBIO DE LEYENDA -->
                     <label>{{ t.lbl_signals }}</label>
+                    <div style="font-size:0.8rem; color:#94a3b8; margin-bottom:5px;">{{ t.scale_desc }}</div>
+                    <div class="scale-legend">
+                        <span>{{ t.scale_low }}</span>
+                        <span>... (3 = Neutro) ...</span>
+                        <span><strong>{{ t.scale_high }}</strong></span>
+                    </div>
+
                     <div class="scale-grid">
                         <div class="scale-item"><div class="title">{{ t.sig_security }}</div><select name="sig_security"><option>1</option><option>2</option><option selected>3</option><option>4</option><option>5</option></select></div>
                         <div class="scale-item"><div class="title">{{ t.sig_autonomy }}</div><select name="sig_autonomy"><option>1</option><option>2</option><option selected>3</option><option>4</option><option>5</option></select></div>

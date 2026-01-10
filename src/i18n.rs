@@ -4,7 +4,6 @@ use std::collections::HashMap;
 pub fn get_translations(lang: &str) -> HashMap<&str, &str> {
     let mut map = HashMap::new();
     
-    // --- CLAVES COMUNES (Base) ---
     match lang {
         "en" => {
             map.insert("title", "Strategic Analyst");
@@ -19,8 +18,9 @@ pub fn get_translations(lang: &str) -> HashMap<&str, &str> {
             map.insert("rec_start", "🔴 Rec");
             map.insert("rec_stop", "⏹ Stop");
             map.insert("loading", "PROCESSING INTELLIGENCE...");
-            
-            // SYSTEMIC MODE
+            map.insert("btn_help", "GUIDE / SCIENCE"); // Nuevo
+
+            // SYSTEMIC
             map.insert("lbl_situation", "I. Operational Context");
             map.insert("ph_situation", "Describe the problem, the conflict, or the scenario...");
             map.insert("lbl_cv", "II. Agent Profile (CV/Bio)");
@@ -28,7 +28,7 @@ pub fn get_translations(lang: &str) -> HashMap<&str, &str> {
             map.insert("lbl_focus", "III. Strategic Focus");
             map.insert("ph_focus", "Specific doubts? What do you want to solve?");
 
-            // MOTORS MODE - LABELS
+            // MOTORS
             map.insert("lbl_target", "Target Name/Rol");
             map.insert("lbl_relation", "Relationship");
             map.insert("lbl_m_context", "II. Context (Pressure, Culture)");
@@ -37,9 +37,13 @@ pub fn get_translations(lang: &str) -> HashMap<&str, &str> {
             map.insert("ph_m_obs", "Under stress they do X... When corrected they do Y...");
             map.insert("lbl_m_goal", "IV. Tactical Goal");
             map.insert("ph_m_goal", "Align team, negotiate raise, de-escalate conflict...");
-            map.insert("lbl_signals", "V. Rapid Signals (Scale 1-5)");
+            
+            // SIGNALS & LEGEND
+            map.insert("lbl_signals", "V. Rapid Signals (Drivers)");
+            map.insert("scale_desc", "Rate the intensity of the need/drive:"); // Nuevo
+            map.insert("scale_low", "1 = Irrelevant / Aversion"); // Nuevo
+            map.insert("scale_high", "5 = Critical / Obsession"); // Nuevo
 
-            // MOTORS MODE - RELATIONS (Expanded)
             map.insert("rel_boss", "Superior / Boss");
             map.insert("rel_team", "Direct Report / Team");
             map.insert("rel_peer", "Peer / Colleague");
@@ -50,7 +54,6 @@ pub fn get_translations(lang: &str) -> HashMap<&str, &str> {
             map.insert("rel_mentor", "Mentor / Advisor");
             map.insert("rel_other", "Other / Complex");
 
-            // MOTORS MODE - SIGNALS (The 10 Drivers)
             map.insert("sig_security", "Security/Safety");
             map.insert("sig_belonging", "Belonging (Tribe)");
             map.insert("sig_status", "Status/Prestige");
@@ -75,8 +78,8 @@ pub fn get_translations(lang: &str) -> HashMap<&str, &str> {
             map.insert("rec_start", "🔴 Gravar");
             map.insert("rec_stop", "⏹ Stop");
             map.insert("loading", "PROCESSANT INTEL·LIGÈNCIA...");
+            map.insert("btn_help", "GUIA / CIÈNCIA");
 
-            // SYSTEMIC MODE
             map.insert("lbl_situation", "I. Context Operatiu");
             map.insert("ph_situation", "Descriviu el problema, el conflicte o l'escenari...");
             map.insert("lbl_cv", "II. Perfil de l'Agent (CV)");
@@ -84,7 +87,6 @@ pub fn get_translations(lang: &str) -> HashMap<&str, &str> {
             map.insert("lbl_focus", "III. Focus Estratègic");
             map.insert("ph_focus", "Dubtes concrets? Què voleu resoldre?");
 
-            // MOTORS MODE - LABELS
             map.insert("lbl_target", "Nom/Rol del Subjecte");
             map.insert("lbl_relation", "Relació");
             map.insert("lbl_m_context", "II. Context (Pressió, Cultura)");
@@ -93,9 +95,12 @@ pub fn get_translations(lang: &str) -> HashMap<&str, &str> {
             map.insert("ph_m_obs", "Sota estrès fa X... Quan se'l corregeix fa Y...");
             map.insert("lbl_m_goal", "IV. Objectiu Tàctic");
             map.insert("ph_m_goal", "Alinear equip, negociar augment, desescalar...");
-            map.insert("lbl_signals", "V. Senyals Ràpids (Escala 1-5)");
+            
+            map.insert("lbl_signals", "V. Senyals Ràpids (Drivers)");
+            map.insert("scale_desc", "Valoreu la intensitat de la necessitat/motor:");
+            map.insert("scale_low", "1 = Irrellevant / Aversió");
+            map.insert("scale_high", "5 = Crític / Obsessió");
 
-            // MOTORS MODE - RELATIONS
             map.insert("rel_boss", "Superior / Cap");
             map.insert("rel_team", "Reporte Directe / Equip");
             map.insert("rel_peer", "Par / Col·laborador");
@@ -106,7 +111,6 @@ pub fn get_translations(lang: &str) -> HashMap<&str, &str> {
             map.insert("rel_mentor", "Mentor / Conseller");
             map.insert("rel_other", "Altre / Complex");
 
-            // MOTORS MODE - SIGNALS
             map.insert("sig_security", "Seguretat/Certesa");
             map.insert("sig_belonging", "Pertinença (Tribu)");
             map.insert("sig_status", "Estatus/Prestigi");
@@ -131,8 +135,8 @@ pub fn get_translations(lang: &str) -> HashMap<&str, &str> {
             map.insert("rec_start", "🔴 Grabar");
             map.insert("rec_stop", "⏹ Stop");
             map.insert("loading", "PROCESANDO INTELIGENCIA...");
+            map.insert("btn_help", "GUÍA / CIENCIA");
 
-            // SYSTEMIC MODE
             map.insert("lbl_situation", "I. Contexto Operativo");
             map.insert("ph_situation", "Describa el problema, el conflicto o el escenario...");
             map.insert("lbl_cv", "II. Perfil del Agente (CV)");
@@ -140,7 +144,6 @@ pub fn get_translations(lang: &str) -> HashMap<&str, &str> {
             map.insert("lbl_focus", "III. Foco Estratégico");
             map.insert("ph_focus", "¿Dudas concretas? ¿Qué quiere resolver?");
 
-            // MOTORS MODE - LABELS
             map.insert("lbl_target", "Nombre/Rol del Sujeto");
             map.insert("lbl_relation", "Relación");
             map.insert("lbl_m_context", "II. Contexto (Presión, Cultura)");
@@ -149,9 +152,12 @@ pub fn get_translations(lang: &str) -> HashMap<&str, &str> {
             map.insert("ph_m_obs", "Bajo estrés hace X... Cuando se le corrige hace Y...");
             map.insert("lbl_m_goal", "IV. Objetivo Táctico");
             map.insert("ph_m_goal", "Alinear equipo, negociar subida, desescalar...");
-            map.insert("lbl_signals", "V. Señales Rápidas (Escala 1-5)");
+            
+            map.insert("lbl_signals", "V. Señales Rápidas (Drivers)");
+            map.insert("scale_desc", "Valore la intensidad de la necesidad/motor:");
+            map.insert("scale_low", "1 = Irrelevante / Aversión");
+            map.insert("scale_high", "5 = Crítico / Obsesión");
 
-            // MOTORS MODE - RELATIONS
             map.insert("rel_boss", "Superior / Jefe");
             map.insert("rel_team", "Reporte Directo / Equipo");
             map.insert("rel_peer", "Par / Colaborador");
@@ -162,7 +168,6 @@ pub fn get_translations(lang: &str) -> HashMap<&str, &str> {
             map.insert("rel_mentor", "Mentor / Consejero");
             map.insert("rel_other", "Otro / Complejo");
 
-            // MOTORS MODE - SIGNALS
             map.insert("sig_security", "Seguridad/Certeza");
             map.insert("sig_belonging", "Pertenencia (Tribu)");
             map.insert("sig_status", "Estatus/Prestigio");
