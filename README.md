@@ -1,11 +1,14 @@
 # Human Motors & Systemic Analyst
 
-![Rust](https://img.shields.io/badge/Rust-1.70%2B-orange?style=flat-square&logo=rust)
+![Rust](https://img.shields.io/badge/Rust-1.75%2B-orange?style=flat-square&logo=rust)
 ![Actix-Web](https://img.shields.io/badge/Actix--Web-v4-green?style=flat-square)
-![OpenAI](https://img.shields.io/badge/AI-OpenAI%20API-blue?style=flat-square&logo=openai)
+![OpenAI Whisper](https://img.shields.io/badge/AI-Whisper%20%2B%20GPT--4o-blue?style=flat-square&logo=openai)
 ![License](https://img.shields.io/badge/License-MIT%2FApache-lightgrey?style=flat-square)
 
 **[ 🇺🇸 English ](#-english) | [ 🇪🇸 Español ](#-español) | [ 🏴󠁥󠁳󠁣󠁴󠁿 Català ](#-català)**
+
+> **Author / Autor:** Angel A. Urbina  
+> **Version:** Core v2.2 (2026)
 
 ---
 
@@ -13,33 +16,38 @@
 ## 🇺🇸 English
 
 ### Overview
-**Human Motors & Systemic Analyst** is a web application built in **Rust** designed to generate **operational reports** from unstructured data (context, facts, behavioral observations, and goals). The system transforms raw information into verifiable hypotheses, explicit assumptions, and actionable plans, avoiding closed narratives.
+**Human Motors & Systemic Analyst** is an advanced operational intelligence suite built in **Rust**. It transforms unstructured data—**text, documents, and now Audio/Voice**—into verifiable hypotheses, systemic power maps, and high-precision behavioral profiles.
 
-It operates in two distinct modes:
-1.  **Human Motors:** Identifies probable motivators, observable signals, and status/justice conflicts. It proposes verification through interviews and low-risk micro-experiments.
-2.  **Systemic Analysis:** Structures the environment using PESTEL, strict analytical discipline (separating facts from inferences), and systems thinking (actors, loops, levers).
+The system is designed to eliminate "narrative noise" and focus on **operational leverage**: What buttons to push, what risks to avoid, and how the system (organization) reacts to pressure.
 
-### Scientific Basis
-In leadership and operations, judgment errors often stem from **misattributions** (overestimating traits vs. context), **biases under uncertainty**, and **social dynamics**. This project operationalizes academic literature to turn a "case" into a disciplined process:
+### 🚀 New in v2.2
+*   **🎙️ Voice-to-Intel (Whisper Integration):** You can now **record voice notes** directly from the browser or upload audio files (`.mp3`, `.wav`, `.m4a`). The system automatically transcribes and analyzes the audio content.
+*   **🌍 Multi-language Core:** Full native support for **English, Spanish, and Catalan**.
+*   **Landing Interface:** New entry point for language selection and system initialization.
 
-*   **Psychological Safety (Edmondson):** Facilitates learning and reduces defensive decision-making.
-*   **Self-Determination Theory (SDT):** Understands behavior as a function of psychological needs (autonomy, competence, relatedness).
-*   **Social Identity & Leadership:** How group belonging and prototypicality condition influence and cooperation.
-*   **Organizational Justice:** Procedural and distributive justice as drivers of trust and conflict.
-*   **Debiasing:** Moving away from narrative certainty towards rival hypotheses and incremental verification.
+### Modes of Operation
+1.  **Human Motors (HUMINT):**
+    *   Identifies psychological drivers (SDT: Autonomy, Competence, Relatedness).
+    *   Detects **Status vs. Security** conflicts.
+    *   Generates a "User Manual" for the target: *Do's & Don'ts*.
+2.  **Systemic Analysis:**
+    *   **PESTEL** scanning for environmental pressure.
+    *   Separates **Facts** from **Inferences** (Intelligence Discipline).
+    *   Identifies feedback loops and systemic bottlenecks.
 
 ### Technical Stack
-*   **Server:** Rust + Actix-Web (async).
-*   **Templates:** Tera.
-*   **LLM Client:** OpenAI Responses API via `reqwest`.
-*   **Ingestion:** `pdf-extract` (PDF), `dotext` (DOCX), and text/markdown parsers.
-*   **Sanitization:** `ammonia` (strict HTML allowlist).
+*   **Server:** Rust + Actix-Web (Async/Tokio).
+*   **AI Engine:** OpenAI `gpt-4o` (Analysis) + `whisper-1` (Audio Transcription).
+*   **Audio Handling:** `reqwest` (multipart streams) + `tokio-util`.
+*   **Frontend:** Tera Templates + HTML5 MediaRecorder API.
+*   **Ingestion:** PDF, DOCX, TXT, MD, MP3, WAV, M4A.
 
 ### Installation & Usage
 
 **Prerequisites:**
-*   Rust (2021 edition)
-*   `libpoppler-glib-dev` (for PDF support on Linux)
+*   Rust (Edition 2021)
+*   `libpoppler-glib-dev` (Linux) / `poppler` (macOS)
+*   OpenAI API Key
 
 **Configuration (`.env`):**
 ```env
@@ -54,80 +62,50 @@ BIND_HOST=0.0.0.0
 cargo run
 ```
 
-**Docker:**
-```bash
-docker build -t human-motors .
-docker run --rm -p 8080:8080 -e OPENAI_API_KEY="sk-..." human-motors
-```
-
 ---
 
 <a name="-español"></a>
 ## 🇪🇸 Español
 
 ### Introducción
-Aplicación web en **Rust** para generar **informes operativos** a partir de información no estructurada. El sistema transforma el contexto y las observaciones en:
-- **Hipótesis verificables** (no “relatos cerrados”),
-- **Contra-hipótesis** y supuestos explícitos,
-- **Indicadores y preguntas** para confirmar/refutar,
-- **Plan de actuación** de corto ciclo (7–14 días).
+**Human Motors & Systemic Analyst** es una suite de inteligencia operativa desarrollada en **Rust**. Su objetivo es transformar información no estructurada —**texto, documentos y ahora Audio/Voz**— en hipótesis verificables, mapas de poder y perfiles conductuales precisos.
 
-### Base Científica (Psicología Operativa)
-El objetivo no es “etiquetar” a las personas, sino reducir la ambigüedad operativa. El software operacionaliza evidencia de la literatura para mitigar errores de juicio:
+El software operacionaliza la psicología organizacional para reducir la incertidumbre en la toma de decisiones críticas.
 
-1.  **Seguridad Psicológica:** Facilita el intercambio de información y reduce decisiones defensivas (elegir "lo seguro para mí" vs "lo óptimo para la organización").
-2.  **Motivación (SDT):** Marco robusto para entender conductas como función de necesidades psicológicas y tipos de regulación.
-3.  **Identidad Social:** Explica cómo la pertenencia y las normas de grupo condicionan la cooperación.
-4.  **Justicia Organizacional:** Las percepciones de justicia procedimental influyen críticamente en la confianza.
-5.  **Debiasing:** Salida basada en hipótesis rivales y evidencia, no en certeza narrativa.
+### 🚀 Novedades v2.2
+*   **🎙️ Inteligencia de Voz (Whisper):** Capacidad para **grabar notas de voz** en tiempo real o subir archivos de audio. El sistema transcribe el contenido usando el modelo Whisper de OpenAI y lo integra automáticamente en el análisis.
+*   **🌍 Soporte Multilingüe:** Interfaz completa disponible en **Español, Catalán e Inglés**.
+*   **Nueva Landing Page:** Pantalla de bienvenida adaptativa para selección de idioma y acceso al sistema.
 
-### Funcionalidades
+### Funcionalidades Clave
+1.  **Motores Humanos:**
+    *   Ranking de motivadores (Teoría de la Autodeterminación).
+    *   Detección de fricciones de **Justicia Organizacional**.
+    *   Protocolos de interacción: *Qué decir y qué callar*.
+2.  **Análisis Sistémico:**
+    *   **PESTEL** y contexto operativo.
+    *   Disciplina de inteligencia: Separación estricta de Hechos vs. Inferencias.
+    *   Pre-Mortem y análisis de bucles de retroalimentación.
 
-#### 1. Motores Humanos
-*   Ranking de hipótesis de motivadores (evidencia vs contra-evidencia).
-*   Señales observables, activadores y fricciones.
-*   **Guía de verificación:** Preguntas de entrevista y micro-experimentos de bajo riesgo.
-*   **Plan ético:** Alineación, incentivos y justicia procedimental.
-
-#### 2. Análisis Sistémico
-*   **PESTEL:** Presiones del entorno.
-*   **Disciplina analítica:** Separación estricta de Hechos vs Hipótesis vs Inferencias.
-*   **Modelo sistémico:** Actores, recursos, bucles de retroalimentación y palancas.
-
-### Arquitectura Técnica
-
-**Stack:**
+### Stack Técnico
 *   **Backend:** Rust + Actix-Web.
-*   **Renderizado:** Tera (`templates/`).
-*   **IA:** Cliente HTTP asíncrono hacia OpenAI Responses API.
-*   **Seguridad:** Sanitización HTML con `ammonia`, subida de archivos segura (`multipart/form-data`) y gestión de límites de memoria.
+*   **IA:** OpenAI `gpt-4o` + `whisper-1`.
+*   **Audio:** Procesamiento de flujos multipart con `tokio` y `reqwest`.
+*   **Frontend:** Diseño "Mobile-First" fluido con soporte para grabación de audio HTML5.
 
-**Flujo de Datos:**
-1.  Recepción Multipart (Texto + Archivos).
-2.  Extracción y normalización (PDF/DOCX/TXT).
-3.  Construcción de Prompt (Sistema vs Usuario).
-4.  Inferencia (LLM).
-5.  Post-proceso y Renderizado HTML.
-
-### Ejecución y Despliegue
+### Ejecución
 
 **Requisitos (Linux/Debian):**
 ```bash
 sudo apt-get update
-sudo apt-get install -y pkg-config libpoppler-glib-dev libglib2.0-dev
+sudo apt-get install -y pkg-config libpoppler-glib-dev libglib2.0-dev libssl-dev
 ```
 
-**Ejecución Local:**
-Crea un archivo `.env` (ver sección de configuración arriba) y ejecuta:
+**Ejecución:**
 ```bash
 cargo run
 ```
-
-**Docker:**
-```bash
-docker build -t motores-humanos .
-docker run --rm -p 8080:8080 --env-file .env motores-humanos
-```
+Accede a `http://localhost:8080`.
 
 ---
 
@@ -135,64 +113,45 @@ docker run --rm -p 8080:8080 --env-file .env motores-humanos
 ## 🏴󠁥󠁳󠁣󠁴󠁿 Català
 
 ### Introducció
-Aplicació web en **Rust** per generar **informes operatius** a partir d'informació no estructurada. El sistema transforma el context i les observacions en hipòtesis verificables, contra-hipòtesis i plans d'actuació de cicle curt, evitant els "relats tancats".
+**Human Motors & Systemic Analyst** és una eina d'intel·ligència operativa avançada feta amb **Rust**. Transforma dades no estructurades —**text, documents i ara Àudio/Veu**— en hipòtesis verificables, mapes de poder sistèmics i perfils conductuals d'alta precisió.
 
-### Base Científica
-En lideratge i entorns operatius, molts errors de judici provenen d'atribucions errònies i biaixos sota incertesa. Aquest projecte transforma un "cas" en un procés d'anàlisi disciplinat basat en:
+Dissenyada per eliminar el "soroll narratiu" i trobar la palanca operativa real.
 
-1.  **Seguretat Psicològica:** Per reduir la presa de decisions defensives.
-2.  **Teoria de l'Autodeterminació (SDT):** Motivació basada en autonomia, competència i relació.
-3.  **Justícia Organitzacional:** Impacte de la justícia procedimental en la confiança i el conflicte.
-4.  **Debiasing:** Ús d'hipòtesis rivals i verificació incremental.
+### 🚀 Novetats v2.2
+*   **🎙️ Intel·ligència de Veu (Whisper):** Podeu **gravar notes de veu** directament des del navegador o pujar fitxers d'àudio. El sistema transcriu i analitza el contingut automàticament.
+*   **🌍 Nucli Multilingüe:** Suport natiu per a **Català, Castellà i Anglès**.
+*   **Interfície d'Entrada:** Nova pantalla d'inici per a la selecció d'idioma.
 
-### Funcionalitats
-
-#### 1. Motors Humans
-*   Rànquing d'hipòtesis de motivadors.
-*   Senyals observables i friccions.
-*   Guia de verificació (entrevistes i micro-experiments).
-
-#### 2. Anàlisi Sistèmica
-*   PESTEL i pressions de l'entorn.
-*   Distinció estricta entre Fets, Hipòtesis i Inferències.
-*   Full de ruta operatiu basat en palanques sistèmiques.
+### Mòduls
+1.  **Motors Humans:** Identificació de *drivers* psicològics, conflictes d'estatus i necessitats de justícia procedimental.
+2.  **Anàlisi Sistèmica:** Ús de PESTEL i pensament sistèmic (bucles de reforç) per dissenyar estratègies robustes.
 
 ### Execució
-
-**Requisits:**
-Veure la secció tècnica anterior (Rust, Cargo, llibreries `poppler`).
-
-**Docker:**
+Veure els requisits a la secció tècnica anterior.
 ```bash
-docker build -t motors-humans .
-docker run --rm -p 8080:8080 --env-file .env motors-humans
+cargo run
 ```
 
 ---
 
-## 📚 Bibliography / Bibliografía / Bibliografia
+## 📚 Scientific Basis / Base Científica
 
-> *Note: This bibliography serves as the conceptual backbone of the project; the software implements a flow of hypotheses and verification based on these works.*
+> *The software operationalizes concepts from:* / *El software operacionaliza conceptos de:*
 
-1.  **Edmondson, A. C.** (2023). *Psychological Safety Comes of Age: Observed Themes in an Established Literature*. **Annual Review of Organizational Psychology and Organizational Behavior**.
-2.  **Van den Broeck, A., et al.** (2021). *Beyond intrinsic and extrinsic motivation: A meta-analysis on self-determination theory’s multidimensional conceptualization of work motivation*. **Organizational Psychology Review**.
-3.  **Steffens, N. K., Haslam, S. A., et al.** (2021). *Advancing the social identity theory of leadership: A meta-analytic review of leader group prototypicality*.
-4.  **Ashforth, B. E.** (2024). *The Future: What We'd Change in “Social Identity Theory and Organizations”*. **SAGE / Annual Review**.
-5.  **Graso, M.** (2020). *Organizational justice enactment: An agent-focused review*. **Human Relations**.
-6.  **Colquitt, J. A., et al.** (2013). *Justice at the Millennium, a Decade Later: A Meta-Analytic Test of Social Exchange and Affect-Based Perspectives*.
-7.  **Rau, D.** (2025). *A review of cognitive biases in strategic decision making (2000–2023)*. **Long Range Planning**.
-8.  **Pavićević, S.** (2025). *Debiasing the Literature on Executive Decision-Making Biases*. **Academy of Management Annals**.
-9.  **Dharanikota, H., et al.** (2024). *Debiasing Judgements Using a Distributed Cognition Approach*.
-10. **Artinger, F. M., & Marx-Fleck, S.** (2025). *Coping with uncertainty: The interaction of psychological safety and authentic leadership in their effects on defensive decision making*. **Journal of Business Research**.
-11. **Wang, Z., et al.** (2022). *Development and Validation of a Motivation Scale for Status*. **Frontiers in Psychology**.
-12. **Kahneman, D., & Tversky, A.** (1979). *Prospect Theory: An Analysis of Decision under Risk*. **Econometrica**.
-13. **Ross, L.** (1977). *The Intuitive Psychologist and His Shortcomings*.
+1.  **Edmondson, A. C.** - *Psychological Safety*.
+2.  **Ryan, R. M. & Deci, E. L.** - *Self-Determination Theory (SDT)*.
+3.  **Heuer, R. J.** - *Psychology of Intelligence Analysis (CIA)*.
+4.  **Meadows, D.** - *Thinking in Systems*.
+5.  **Kahneman, D.** - *Thinking, Fast and Slow (System 1 vs System 2)*.
 
 ---
 
 ## License
 
 This project is licensed under the [MIT License](LICENSE).
+
+**© 2026 Angel A. Urbina. All Rights Reserved.**
+
 
 
 
