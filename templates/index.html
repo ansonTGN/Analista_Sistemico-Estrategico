@@ -17,29 +17,46 @@
         .action-btn { background: rgba(30, 41, 59, 0.5); border: 1px solid #334155; color: #94a3b8; padding: 10px 14px; border-radius: 6px; cursor: pointer; }
         h1 { font-family: 'Cinzel', serif; color: var(--accent); font-size: 1.6rem; text-align: center; margin: 0; }
         .subtitle { text-align: center; font-size: 0.7rem; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); margin-bottom: 18px; }
+        
         .form-card { background: var(--card); padding: 20px; border-radius: 12px; border: 1px solid var(--border); box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        
         .mode-switch { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 14px; }
         .mode-btn { background: transparent; border: 1px solid #334155; color: #94a3b8; padding: 12px; border-radius: 10px; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 5px; }
         .mode-btn.active { border-color: var(--accent); color: var(--accent); background: rgba(212, 175, 55, 0.12); }
         .mode-panel { display: none; }
         .mode-panel.active { display: block; }
+        
         .tabs { display: flex; gap: 5px; margin-bottom: 10px; }
         .tab-btn { background: transparent; border: 1px solid #334155; color: #94a3b8; padding: 8px; border-radius: 6px; cursor: pointer; flex: 1; font-size: 0.8rem; }
         .tab-btn.active { border-color: var(--accent); color: var(--accent); background: rgba(212, 175, 55, 0.12); }
+        
         .input-group { display: none; }
         .input-group.active { display: block; }
+        
         label { display: block; margin-top: 20px; color: var(--accent); font-family: 'Cinzel', serif; font-size: 0.95rem; }
         textarea, input[type="text"], select, input[type="file"] { width: 100%; background: var(--input-bg); border: 1px solid #334155; color: white; padding: 12px; border-radius: 10px; box-sizing: border-box; font-family: 'Inter', sans-serif; font-size: 16px; }
+        
         .grid-2 { display: grid; grid-template-columns: 1fr; gap: 15px; }
-        .scale-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px; }
-        .scale-item { border: 1px solid #223049; border-radius: 12px; padding: 12px; background: rgba(15,23,42,0.35); }
+        
+        /* Ajuste de escala para 10 items */
+        .scale-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 10px; }
+        .scale-item { border: 1px solid #223049; border-radius: 8px; padding: 10px; background: rgba(15,23,42,0.35); }
+        .scale-item .title { font-size: 0.75rem; font-weight: 600; color: #cbd5e1; margin-bottom: 4px; text-transform: uppercase; height: 28px; display:flex; align-items:end; }
+        .scale-item select { padding: 6px; font-size: 0.9rem; }
+        
         button.submit-btn { margin-top: 25px; width: 100%; padding: 18px; background: var(--accent); color: var(--bg); border: none; font-family: 'Cinzel', serif; font-weight: bold; font-size: 1rem; cursor: pointer; border-radius: 12px; }
+        
         .rec-controls { display: flex; gap: 10px; align-items: center; margin-top: 10px; }
         .rec-btn { background: #ef4444; color: white; border: none; padding: 8px 16px; border-radius: 20px; cursor: pointer; font-weight: bold; }
         .rec-btn.recording { animation: pulse 1.5s infinite; }
         .audio-status { font-size: 0.8rem; color: var(--accent); }
         @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
-        @media (min-width: 860px) { .grid-2, .scale-grid { grid-template-columns: 1fr 1fr; } }
+        
+        @media (min-width: 860px) { 
+            .grid-2 { grid-template-columns: 1fr 1fr; } 
+            .scale-grid { grid-template-columns: 1fr 1fr 1fr 1fr 1fr; } /* 5 columnas en PC */
+        }
+        
         #loader { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(10,14,23,0.95); z-index: 2000; justify-content: center; align-items: center; flex-direction: column; text-align: center; }
         .spinner { width: 44px; height: 44px; border: 3px solid #333; border-top: 3px solid var(--accent); border-radius: 50%; animation: spin 1s infinite linear; }
         @keyframes spin { 100% { transform: rotate(360deg); } }
@@ -69,7 +86,6 @@
             motEls.forEach(el => el.disabled = !isMotors);
         }
 
-        // --- AUDIO RECORDER LOGIC ---
         let mediaRecorder;
         let audioChunks = [];
         
@@ -79,31 +95,27 @@
             const input = document.getElementById(groupId + '-audio-file');
 
             if (btn.classList.contains('recording')) {
-                // STOP RECORDING
                 mediaRecorder.stop();
                 btn.classList.remove('recording');
                 btn.innerHTML = "{{ t.rec_start }}";
             } else {
-                // START RECORDING
                 try {
                     const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
                     mediaRecorder = new MediaRecorder(stream);
                     audioChunks = [];
                     mediaRecorder.ondataavailable = event => audioChunks.push(event.data);
                     mediaRecorder.onstop = () => {
-                        const audioBlob = new Blob(audioChunks, { type: 'audio/mp3' }); // Usually webm/mp3
+                        const audioBlob = new Blob(audioChunks, { type: 'audio/mp3' });
                         const file = new File([audioBlob], "recording.mp3", { type: "audio/mp3" });
-                        
-                        // Transfer to input
                         const dataTransfer = new DataTransfer();
                         dataTransfer.items.add(file);
                         input.files = dataTransfer.files;
-                        status.innerText = "Audio OK (" + (file.size/1024).toFixed(1) + " KB)";
+                        status.innerText = "OK (" + (file.size/1024).toFixed(1) + " KB)";
                     };
                     mediaRecorder.start();
                     btn.classList.add('recording');
                     btn.innerHTML = "{{ t.rec_stop }}";
-                    status.innerText = "Recording...";
+                    status.innerText = "Rec...";
                 } catch (err) {
                     alert("Mic Error: " + err.message);
                 }
@@ -172,11 +184,15 @@
                         <div>
                             <label>{{ t.lbl_relation }}</label>
                             <select name="relationship">
-                                <option value="equipo">Team</option>
-                                <option value="jefe">Boss</option>
-                                <option value="par">Peer</option>
-                                <option value="cliente">Client</option>
-                                <option value="adversario">Adversary</option>
+                                <option value="boss">{{ t.rel_boss }}</option>
+                                <option value="team">{{ t.rel_team }}</option>
+                                <option value="peer">{{ t.rel_peer }}</option>
+                                <option value="client">{{ t.rel_client }}</option>
+                                <option value="provider">{{ t.rel_provider }}</option>
+                                <option value="adversary">{{ t.rel_adversary }}</option>
+                                <option value="regulator">{{ t.rel_regulator }}</option>
+                                <option value="mentor">{{ t.rel_mentor }}</option>
+                                <option value="other">{{ t.rel_other }}</option>
                             </select>
                         </div>
                     </div>
@@ -218,10 +234,17 @@
 
                     <label>{{ t.lbl_signals }}</label>
                     <div class="scale-grid">
-                        <div class="scale-item"><div class="title">Security</div><select name="sig_security"><option>1</option><option>2</option><option selected>3</option><option>4</option><option>5</option></select></div>
-                        <div class="scale-item"><div class="title">Status</div><select name="sig_status"><option>1</option><option>2</option><option selected>3</option><option>4</option><option>5</option></select></div>
-                        <div class="scale-item"><div class="title">Autonomy</div><select name="sig_autonomy"><option>1</option><option>2</option><option selected>3</option><option>4</option><option>5</option></select></div>
-                        <div class="scale-item"><div class="title">Justice</div><select name="sig_justice"><option>1</option><option>2</option><option selected>3</option><option>4</option><option>5</option></select></div>
+                        <div class="scale-item"><div class="title">{{ t.sig_security }}</div><select name="sig_security"><option>1</option><option>2</option><option selected>3</option><option>4</option><option>5</option></select></div>
+                        <div class="scale-item"><div class="title">{{ t.sig_autonomy }}</div><select name="sig_autonomy"><option>1</option><option>2</option><option selected>3</option><option>4</option><option>5</option></select></div>
+                        <div class="scale-item"><div class="title">{{ t.sig_mastery }}</div><select name="sig_mastery"><option>1</option><option>2</option><option selected>3</option><option>4</option><option>5</option></select></div>
+                        <div class="scale-item"><div class="title">{{ t.sig_belonging }}</div><select name="sig_belonging"><option>1</option><option>2</option><option selected>3</option><option>4</option><option>5</option></select></div>
+                        <div class="scale-item"><div class="title">{{ t.sig_status }}</div><select name="sig_status"><option>1</option><option>2</option><option selected>3</option><option>4</option><option>5</option></select></div>
+                        
+                        <div class="scale-item"><div class="title">{{ t.sig_justice }}</div><select name="sig_justice"><option>1</option><option>2</option><option selected>3</option><option>4</option><option>5</option></select></div>
+                        <div class="scale-item"><div class="title">{{ t.sig_purpose }}</div><select name="sig_purpose"><option>1</option><option>2</option><option selected>3</option><option>4</option><option>5</option></select></div>
+                        <div class="scale-item"><div class="title">{{ t.sig_control }}</div><select name="sig_control"><option>1</option><option>2</option><option selected>3</option><option>4</option><option>5</option></select></div>
+                        <div class="scale-item"><div class="title">{{ t.sig_curiosity }}</div><select name="sig_curiosity"><option>1</option><option>2</option><option selected>3</option><option>4</option><option>5</option></select></div>
+                        <div class="scale-item"><div class="title">{{ t.sig_comfort }}</div><select name="sig_comfort"><option>1</option><option>2</option><option selected>3</option><option>4</option><option>5</option></select></div>
                     </div>
 
                     <button type="submit" class="submit-btn">{{ t.btn_motors }}</button>

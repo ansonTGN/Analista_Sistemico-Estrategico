@@ -31,12 +31,17 @@ pub async fn motors(
     let mut m_goal = String::new();
     let mut lang = "es".to_string();
 
-    // Signals
+    // The 10 Fundamental Signals (Initialized to neutral "3")
     let mut sig_security = "3".to_string();
+    let mut sig_belonging = "3".to_string();
     let mut sig_status = "3".to_string();
     let mut sig_autonomy = "3".to_string();
+    let mut sig_mastery = "3".to_string();
     let mut sig_justice = "3".to_string();
-    // (Simplificado para brevedad, en prod mapear todos)
+    let mut sig_purpose = "3".to_string();
+    let mut sig_control = "3".to_string();
+    let mut sig_curiosity = "3".to_string();
+    let mut sig_comfort = "3".to_string();
 
     while let Ok(Some(field)) = payload.try_next().await {
         let cd = field.content_disposition();
@@ -79,18 +84,43 @@ pub async fn motors(
                 "m_observations" => m_observations.push_str(&val),
                 "m_goal" => m_goal.push_str(&val),
                 "lang" => lang = val,
+                
+                // Capture all 10 signals
                 "sig_security" => sig_security = val,
+                "sig_belonging" => sig_belonging = val,
                 "sig_status" => sig_status = val,
                 "sig_autonomy" => sig_autonomy = val,
+                "sig_mastery" => sig_mastery = val,
                 "sig_justice" => sig_justice = val,
+                "sig_purpose" => sig_purpose = val,
+                "sig_control" => sig_control = val,
+                "sig_curiosity" => sig_curiosity = val,
+                "sig_comfort" => sig_comfort = val,
                 _ => {}
             }
         }
     }
 
     let user_prompt = format!(
-        "OUTPUT LANGUAGE: {}\n\n=== CASE FILE ===\n[TARGET]: {} ({})\n[CONTEXT]: {}\n[OBSERVATIONS]: {}\n[GOAL]: {}\n[SIGNALS]: Sec {}, Stat {}, Aut {}, Just {}",
-        lang, target_name, relationship, m_context, m_observations, m_goal, sig_security, sig_status, sig_autonomy, sig_justice
+        "OUTPUT LANGUAGE: {}\n\n=== CASE FILE ===\n\
+         [TARGET]: {} ({})\n\
+         [CONTEXT]: {}\n\
+         [OBSERVATIONS]: {}\n\
+         [GOAL]: {}\n\
+         [RAPID SIGNALS 1-5]:\n\
+         - Security: {}\n\
+         - Belonging: {}\n\
+         - Status: {}\n\
+         - Autonomy: {}\n\
+         - Mastery: {}\n\
+         - Justice: {}\n\
+         - Purpose: {}\n\
+         - Control: {}\n\
+         - Curiosity: {}\n\
+         - Comfort: {}",
+        lang, target_name, relationship, m_context, m_observations, m_goal, 
+        sig_security, sig_belonging, sig_status, sig_autonomy, sig_mastery,
+        sig_justice, sig_purpose, sig_control, sig_curiosity, sig_comfort
     );
 
     let request_body = ResponsesRequest {
@@ -110,8 +140,16 @@ pub async fn motors(
 
     let content = sanitize_ai_html(&ensure_article(extract_output_text(&resp).unwrap_or_default()));
     
-    // JSON para guardar caso (simplificado)
-    let case_data = json!({ "target": target_name, "context": m_context });
+    // JSON para guardar caso completo
+    let case_data = json!({ 
+        "target": target_name, 
+        "relation": relationship,
+        "context": m_context,
+        "signals": {
+            "sec": sig_security, "bel": sig_belonging, "sta": sig_status, "aut": sig_autonomy, "mas": sig_mastery,
+            "jus": sig_justice, "pur": sig_purpose, "con": sig_control, "cur": sig_curiosity, "com": sig_comfort
+        }
+    });
 
     let mut ctx = Context::new();
     ctx.insert("report", &content);
