@@ -1,6 +1,6 @@
 [package]
 name = "analista_sistemico"
-version = "0.2.1"
+version = "0.2.2"
 edition = "2021"
 
 [dependencies]
@@ -8,6 +8,7 @@ actix-web = "4"
 actix-multipart = "0.6"
 futures = "0.3"
 serde = { version = "1", features = ["derive"] }
+serde_json = "1" # <--- Esta es la librería que faltaba
 tera = "1"
 reqwest = { version = "0.12", features = ["json", "rustls-tls"] }
 dotenv = "0.15"

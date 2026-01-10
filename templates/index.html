@@ -21,17 +21,48 @@
             font-family: 'Inter', sans-serif;
             color: var(--text);
             margin: 0;
-            padding: 20px;
+            padding: 15px; /* Menos padding en móvil */
         }
 
         .container { max-width: 900px; margin: 0 auto; }
 
+        /* HEADER & ACTIONS */
+        .header-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+            margin-bottom: 20px;
+            flex-wrap: wrap; /* Permite que bajen en móvil */
+        }
+        .action-btn {
+            background: rgba(30, 41, 59, 0.5);
+            border: 1px solid #334155;
+            color: #94a3b8;
+            padding: 10px 14px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.2s;
+            font-weight: 600;
+        }
+        .action-btn:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+            background: rgba(212, 175, 55, 0.05);
+        }
+
         h1 {
             font-family: 'Cinzel', serif;
             color: var(--accent);
-            font-size: 1.8rem;
+            font-size: 1.6rem;
             text-align: center;
             margin-bottom: 5px;
+            margin-top: 0;
+            line-height: 1.2;
         }
 
         .subtitle {
@@ -51,6 +82,7 @@
             box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
 
+        /* SWITCHER DE MODO */
         .mode-switch {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -61,13 +93,16 @@
             background: transparent;
             border: 1px solid #334155;
             color: #94a3b8;
-            padding: 10px 12px;
+            padding: 12px 5px;
             border-radius: 10px;
             cursor: pointer;
-            font-size: 0.9rem;
-            user-select: none;
+            font-size: 0.85rem;
             text-align: center;
             font-weight: 600;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
         }
         .mode-btn.active {
             border-color: var(--accent);
@@ -83,13 +118,12 @@
             background: transparent;
             border: 1px solid #334155;
             color: #94a3b8;
-            padding: 9px 14px;
+            padding: 10px;
             border-radius: 8px;
             cursor: pointer;
             font-size: 0.85rem;
             flex: 1;
             text-align: center;
-            user-select: none;
         }
         .tab-btn.active {
             border-color: var(--accent);
@@ -102,12 +136,11 @@
 
         label {
             display: block;
-            margin-top: 18px;
+            margin-top: 20px;
             color: var(--accent);
             font-family: 'Cinzel', serif;
             font-size: 0.95rem;
         }
-        .hint { font-size: 0.78rem; color: var(--muted); margin: 8px 0 8px; line-height: 1.4; }
 
         textarea, input[type="file"], input[type="text"], select {
             width: 100%;
@@ -118,19 +151,18 @@
             border-radius: 10px;
             box-sizing: border-box;
             font-family: 'Inter', sans-serif;
-            font-size: 16px;
+            font-size: 16px; /* 16px evita zoom en iOS */
         }
+        textarea { resize: vertical; }
 
-        .grid-2 { display: grid; grid-template-columns: 1fr; gap: 10px; }
-        @media (min-width: 860px) { .grid-2 { grid-template-columns: 1fr 1fr; } }
-
+        .grid-2 { display: grid; grid-template-columns: 1fr; gap: 15px; }
+        
         .scale-grid {
             display: grid;
-            grid-template-columns: 1fr;
+            grid-template-columns: 1fr 1fr; /* 2 columnas en móvil por defecto */
             gap: 10px;
             margin-top: 10px;
         }
-        @media (min-width: 860px) { .scale-grid { grid-template-columns: 1fr 1fr; } }
 
         .scale-item {
             border: 1px solid #223049;
@@ -142,18 +174,12 @@
             color: var(--text);
             font-weight: 700;
             margin-bottom: 6px;
-            font-size: 0.95rem;
+            font-size: 0.85rem;
         }
-        .scale-item .desc {
-            color: var(--muted);
-            font-size: 0.78rem;
-            margin-bottom: 10px;
-            line-height: 1.35;
-        }
-        .scale-item select { font-size: 0.95rem; }
+        .scale-item select { font-size: 0.95rem; padding: 8px; }
 
         button.submit-btn {
-            margin-top: 22px;
+            margin-top: 25px;
             width: 100%;
             padding: 18px;
             background: var(--accent);
@@ -164,20 +190,35 @@
             font-size: 1rem;
             cursor: pointer;
             border-radius: 12px;
+            -webkit-tap-highlight-color: transparent;
         }
-        button.submit-btn:active { transform: translateY(1px); }
+        button.submit-btn:active { transform: translateY(2px); }
 
         .methodology-badge {
-            display: inline-block;
             background: rgba(212, 175, 55, 0.1);
             border: 1px solid var(--accent);
             color: var(--accent);
             padding: 2px 6px;
             font-size: 0.6rem;
-            border-radius: 6px;
-            margin-left: 10px;
-            vertical-align: middle;
+            border-radius: 4px;
             letter-spacing: 1px;
+        }
+
+        /* --- MEDIA QUERIES PARA MÓVIL --- */
+        @media (min-width: 860px) {
+            .grid-2 { grid-template-columns: 1fr 1fr; }
+            .scale-grid { grid-template-columns: 1fr 1fr; }
+            .mode-btn { flex-direction: row; justify-content: center; gap: 10px; }
+        }
+
+        @media (max-width: 600px) {
+            h1 { font-size: 1.4rem; }
+            .form-card { padding: 15px; }
+            .header-actions { justify-content: stretch; }
+            .action-btn { width: 100%; } /* Botones full width en móvil */
+            
+            /* Ajuste de escala en pantallas muy pequeñas */
+            .scale-grid { grid-template-columns: 1fr 1fr; } 
         }
 
         #loader {
@@ -186,48 +227,29 @@
             background: rgba(10,14,23,0.95);
             z-index: 2000;
             justify-content: center; align-items: center; flex-direction: column;
+            padding: 20px; text-align: center;
         }
         .spinner { width: 44px; height: 44px; border: 3px solid #333; border-top: 3px solid var(--accent); border-radius: 50%; animation: spin 1s infinite linear; }
         @keyframes spin { 100% { transform: rotate(360deg); } }
-
-        .fineprint {
-            color: var(--muted);
-            font-size: 0.75rem;
-            margin-top: 10px;
-            line-height: 1.4;
-        }
     </style>
 
     <script>
+        // --- LOGICA DE TABS ---
         function switchTab(groupName, mode) {
             document.getElementById(groupName + '-text-input').classList.toggle('active', mode === 'text');
             document.getElementById(groupName + '-file-input').classList.toggle('active', mode === 'file');
             document.getElementById(groupName + '-btn-text').classList.toggle('active', mode === 'text');
             document.getElementById(groupName + '-btn-file').classList.toggle('active', mode === 'file');
 
-            // Limpieza para evitar mezcla de inputs
-            if (mode === 'text') {
-                document.querySelector(`#${groupName}-file-input input`).value = "";
-            }
-            if (mode === 'file') {
-                document.querySelector(`#${groupName}-text-input textarea`).value = "";
-            }
+            if (mode === 'text') document.querySelector(`#${groupName}-file-input input`).value = "";
+            if (mode === 'file') document.querySelector(`#${groupName}-text-input textarea`).value = "";
         }
 
-        function setDisabled(container, disabled) {
-            const els = container.querySelectorAll('input, textarea, select, button');
-            els.forEach(el => {
-                // NO deshabilitar botones del propio switch global
-                if (el.classList.contains('mode-btn')) return;
-                el.disabled = disabled;
-            });
-        }
-
+        // --- LOGICA DE MODOS ---
         function switchMode(mode) {
             const form = document.getElementById('main-form');
             const sysPanel = document.getElementById('mode-system');
             const motPanel = document.getElementById('mode-motors');
-
             const sysBtn = document.getElementById('mode-btn-system');
             const motBtn = document.getElementById('mode-btn-motors');
 
@@ -235,38 +257,123 @@
 
             sysPanel.classList.toggle('active', !isMotors);
             motPanel.classList.toggle('active', isMotors);
-
             sysBtn.classList.toggle('active', !isMotors);
             motBtn.classList.toggle('active', isMotors);
 
-            // Cambia el endpoint
             form.action = isMotors ? "/motors" : "/analyze";
 
-            // Deshabilita inputs del panel inactivo (evita mezclar payload)
-            setDisabled(sysPanel, isMotors);
-            setDisabled(motPanel, !isMotors);
+            const sysEls = sysPanel.querySelectorAll('input, textarea, select');
+            const motEls = motPanel.querySelectorAll('input, textarea, select');
+            
+            sysEls.forEach(el => el.disabled = isMotors);
+            motEls.forEach(el => el.disabled = !isMotors);
 
             document.getElementById('mode').value = isMotors ? "motors" : "system";
         }
 
+        // --- IMPORTAR / EXPORTAR (JSON) ---
+        function exportDraft() {
+            const form = document.getElementById('main-form');
+            const formData = new FormData(form);
+            const data = {};
+            
+            formData.forEach((value, key) => {
+                if (!(value instanceof File)) {
+                    data[key] = value;
+                }
+            });
+            
+            document.querySelectorAll('textarea, select, input[type="text"]').forEach(el => {
+                if (el.name) data[el.name] = el.value;
+            });
+
+            const jsonStr = JSON.stringify(data, null, 2);
+            const blob = new Blob([jsonStr], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `Borrador_Caso_${Date.now()}.json`;
+            document.body.appendChild(a);
+            a.click();
+            setTimeout(() => { document.body.removeChild(a); URL.revokeObjectURL(url); }, 1000);
+        }
+
+        function importCase(input) {
+            const file = input.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const data = JSON.parse(e.target.result);
+                    populateForm(data);
+                } catch (err) {
+                    alert("Error al leer JSON: " + err.message);
+                }
+            };
+            reader.readAsText(file);
+            input.value = '';
+        }
+
+        function populateForm(data) {
+            if (data.mode) {
+                switchMode(data.mode);
+            } else if (data.signals) {
+                switchMode('motors');
+            }
+
+            for (const [key, value] of Object.entries(data)) {
+                if (key === 'signals' && typeof value === 'object') {
+                    for (const [sKey, sVal] of Object.entries(value)) {
+                        const el = document.getElementsByName(sKey)[0];
+                        if (el) el.value = sVal;
+                    }
+                    continue;
+                }
+
+                const el = document.getElementsByName(key)[0];
+                if (el) {
+                    el.value = value;
+                    el.disabled = false;
+                }
+            }
+
+            if (data.m_context && data.m_context.length > 5) switchTab('mctx', 'text');
+            if (data.m_observations && data.m_observations.length > 5) switchTab('mobsv', 'text');
+            if (data.situation && data.situation.length > 5) switchTab('sit', 'text');
+            if (data.cv && data.cv.length > 5) switchTab('cv', 'text');
+
+            alert("Datos restaurados correctamente.");
+        }
+
         window.addEventListener('DOMContentLoaded', () => {
-            // Por defecto: Motores Humanos (puedes cambiar a 'system' si prefieres)
             switchMode('motors');
         });
     </script>
 </head>
 <body>
     <div class="container">
+        <div class="header-actions">
+            <button class="action-btn" onclick="document.getElementById('json-upload').click()">
+                📂 Cargar Caso
+            </button>
+            <button class="action-btn" onclick="exportDraft()">
+                💾 Guardar
+            </button>
+            <input type="file" id="json-upload" accept=".json" style="display:none" onchange="importCase(this)">
+        </div>
+
         <h1>Analista Estratégico</h1>
         <div class="subtitle">DIAGNÓSTICO OPERATIVO Y MOTORES HUMANOS</div>
 
         <div class="form-card">
-            <div class="mode-switch" role="tablist" aria-label="Modo de análisis">
+            <div class="mode-switch">
                 <button id="mode-btn-system" class="mode-btn" type="button" onclick="switchMode('system')">
-                    Análisis Sistémico <span class="methodology-badge">PESTEL + HEUER</span>
+                    Análisis Sistémico <span class="methodology-badge">PESTEL</span>
                 </button>
                 <button id="mode-btn-motors" class="mode-btn" type="button" onclick="switchMode('motors')">
-                    Motores Humanos <span class="methodology-badge">SEÑALES + HIPÓTESIS</span>
+                    Motores Humanos <span class="methodology-badge">HUMINT</span>
                 </button>
             </div>
 
@@ -275,20 +382,12 @@
 
                 <input type="hidden" id="mode" name="mode" value="motors" />
 
-                <!-- ===================== -->
-                <!-- MODO 1: SISTÉMICO -->
-                <!-- ===================== -->
+                <!-- MODO SISTÉMICO -->
                 <div id="mode-system" class="mode-panel">
-                    <label>
-                        I. Contexto Operativo
-                        <span class="methodology-badge">FILTRO PESTEL ACTIVO</span>
-                    </label>
-
-                    <div class="hint">Admite: PDF, DOCX, TXT, MD. El sistema descompondrá datos en matriz de entorno y generará un plan de maniobra.</div>
-
-                    <div class="tabs" role="tablist" aria-label="Contexto Operativo">
+                    <label>I. Contexto Operativo</label>
+                    <div class="tabs">
                         <button id="sit-btn-text" class="tab-btn active" type="button" onclick="switchTab('sit', 'text')">Escribir</button>
-                        <button id="sit-btn-file" class="tab-btn" type="button" onclick="switchTab('sit', 'file')">Subir archivo</button>
+                        <button id="sit-btn-file" class="tab-btn" type="button" onclick="switchTab('sit', 'file')">Archivo</button>
                     </div>
                     <div id="sit-text-input" class="input-group active">
                         <textarea name="situation" rows="4" placeholder="Describa el problema..."></textarea>
@@ -298,163 +397,120 @@
                     </div>
 
                     <label>II. Perfil del Agente (CV)</label>
-                    <div class="tabs" role="tablist" aria-label="Perfil del Agente">
-                        <button id="cv-btn-text" class="tab-btn active" type="button" onclick="switchTab('cv', 'text')">Pegar CV</button>
-                        <button id="cv-btn-file" class="tab-btn" type="button" onclick="switchTab('cv', 'file')">Subir CV</button>
+                    <div class="tabs">
+                        <button id="cv-btn-text" class="tab-btn active" type="button" onclick="switchTab('cv', 'text')">Escribir</button>
+                        <button id="cv-btn-file" class="tab-btn" type="button" onclick="switchTab('cv', 'file')">Archivo</button>
                     </div>
                     <div id="cv-text-input" class="input-group active">
-                        <textarea name="cv" rows="6" placeholder="Trayectoria profesional..."></textarea>
+                        <textarea name="cv" rows="6" placeholder="Trayectoria..."></textarea>
                     </div>
                     <div id="cv-file-input" class="input-group">
                         <input type="file" name="cv_file" accept=".pdf,.docx,.txt,.md">
                     </div>
 
-                    <label>III. Foco Estratégico (Opcional)</label>
+                    <label>III. Foco Estratégico</label>
                     <textarea name="extra_questions" rows="2" placeholder="¿Dudas concretas?"></textarea>
 
-                    <button type="submit" class="submit-btn">INICIAR ANÁLISIS SISTÉMICO</button>
+                    <button type="submit" class="submit-btn">INICIAR ANÁLISIS</button>
                 </div>
 
-                <!-- ===================== -->
-                <!-- MODO 2: MOTORES HUMANOS -->
-                <!-- ===================== -->
+                <!-- MODO MOTORES -->
                 <div id="mode-motors" class="mode-panel">
-                    <label>
-                        I. Persona objetivo y contexto
-                        <span class="methodology-badge">LECTURA OPERATIVA</span>
-                    </label>
-                    <div class="hint">
-                        Describe la persona y el entorno. La salida prioriza: hipótesis de motivadores, señales observables,
-                        preguntas de verificación y un plan de actuación ético (liderazgo, negociación, gestión).
-                    </div>
-
+                    <label>I. Persona y Relación</label>
                     <div class="grid-2">
                         <div>
-                            <label>Nombre/identificador (opcional)</label>
-                            <input type="text" name="target_name" placeholder="Ej.: 'Jefe de mantenimiento', 'Candidato A'">
+                            <label style="margin-top:0">Nombre/Rol</label>
+                            <input type="text" name="target_name" placeholder="Ej.: Jefe de Ventas">
                         </div>
                         <div>
-                            <label>Relación contigo</label>
+                            <label style="margin-top:0">Relación</label>
                             <select name="relationship">
-                                <option value="equipo">Mi equipo</option>
-                                <option value="jefe">Mi jefe</option>
-                                <option value="par">Par/colaborador</option>
-                                <option value="cliente">Cliente/proveedor</option>
-                                <option value="candidato">Candidato/selección</option>
-                                <option value="otro">Otro</option>
+                                <option value="equipo">Mi equipo / Reporte directo</option>
+                                <option value="jefe">Mi jefe / Superior</option>
+                                <option value="par">Par / Colaborador transversal</option>
+                                <option value="cliente">Cliente / Stakeholder</option>
+                                <option value="proveedor">Proveedor / Socio externo</option>
+                                <option value="adversario">Adversario / Rival táctico</option>
+                                <option value="candidato">Candidato / Talento</option>
+                                <option value="regulador">Regulador / Institucional</option>
+                                <option value="otro">Otro / Red compleja</option>
                             </select>
                         </div>
                     </div>
 
-                    <label>II. Contexto (texto o archivo)</label>
-                    <div class="tabs" role="tablist" aria-label="Contexto Motores">
+                    <label>II. Contexto (Presión, cultura, incentivos)</label>
+                    <div class="tabs">
                         <button id="mctx-btn-text" class="tab-btn active" type="button" onclick="switchTab('mctx', 'text')">Escribir</button>
-                        <button id="mctx-btn-file" class="tab-btn" type="button" onclick="switchTab('mctx', 'file')">Subir archivo</button>
+                        <button id="mctx-btn-file" class="tab-btn" type="button" onclick="switchTab('mctx', 'file')">Archivo</button>
                     </div>
                     <div id="mctx-text-input" class="input-group active">
-                        <textarea name="m_context" rows="4" placeholder="Entorno, presión, incentivos, cultura, reglas, lo que está en juego..."></textarea>
+                        <textarea name="m_context" rows="4" placeholder="¿Qué está en juego? ¿Reglas no escritas?"></textarea>
                     </div>
                     <div id="mctx-file-input" class="input-group">
                         <input type="file" name="m_context_file" accept=".pdf,.docx,.txt,.md">
                     </div>
 
-                    <label>III. Observaciones conductuales (texto o archivo)</label>
-                    <div class="tabs" role="tablist" aria-label="Observaciones Motores">
+                    <label>III. Observaciones (Hechos, frases, reacciones)</label>
+                    <div class="tabs">
                         <button id="mobsv-btn-text" class="tab-btn active" type="button" onclick="switchTab('mobsv', 'text')">Escribir</button>
-                        <button id="mobsv-btn-file" class="tab-btn" type="button" onclick="switchTab('mobsv', 'file')">Subir archivo</button>
+                        <button id="mobsv-btn-file" class="tab-btn" type="button" onclick="switchTab('mobsv', 'file')">Archivo</button>
                     </div>
                     <div id="mobsv-text-input" class="input-group active">
-                        <textarea name="m_observations" rows="6" placeholder="Hechos observables: frases literales, patrones bajo estrés, reacciones a reconocimiento/justicia, defensa de territorio, necesidad de control..."></textarea>
+                        <textarea name="m_observations" rows="6" placeholder="Bajo estrés hace X... Cuando se le corrige hace Y..."></textarea>
                     </div>
                     <div id="mobsv-file-input" class="input-group">
                         <input type="file" name="m_observations_file" accept=".pdf,.docx,.txt,.md">
                     </div>
 
-                    <label>IV. Objetivo de la interacción</label>
-                    <textarea name="m_goal" rows="2" placeholder="Ej.: alinear al equipo, negociar cambio, reducir conflicto, motivar, retener talento, evaluar riesgo..."></textarea>
+                    <label>IV. Objetivo</label>
+                    <textarea name="m_goal" rows="2" placeholder="Ej.: Alinear equipo, negociar subida, desescalar conflicto..."></textarea>
 
-                    <label>V. Señales rápidas (1=No aplica / 5=Muy dominante)</label>
-                    <div class="hint">Esto no es un test clínico; es un “capturador de señales” para mejorar la inferencia.</div>
-
+                    <label>V. Señales Rápidas (1-5)</label>
+                    <div class="hint">1: Nada importante / 5: Crítico para la persona</div>
                     <div class="scale-grid">
                         <div class="scale-item">
-                            <div class="title">Seguridad/estabilidad</div>
-                            <div class="desc">Necesidad de certidumbre; aversión al error; búsqueda de garantías.</div>
-                            <select name="sig_security">
-                                <option value="1">1</option><option value="2">2</option><option value="3" selected>3</option><option value="4">4</option><option value="5">5</option>
-                            </select>
+                            <div class="title">Seguridad</div>
+                            <select name="sig_security"><option value="1">1</option><option value="2">2</option><option value="3" selected>3</option><option value="4">4</option><option value="5">5</option></select>
                         </div>
                         <div class="scale-item">
-                            <div class="title">Pertenencia/aceptación</div>
-                            <div class="desc">Sensibilidad a exclusión; lealtades; lenguaje “nosotros/ellos”.</div>
-                            <select name="sig_belonging">
-                                <option value="1">1</option><option value="2">2</option><option value="3" selected>3</option><option value="4">4</option><option value="5">5</option>
-                            </select>
+                            <div class="title">Pertenencia</div>
+                            <select name="sig_belonging"><option value="1">1</option><option value="2">2</option><option value="3" selected>3</option><option value="4">4</option><option value="5">5</option></select>
                         </div>
                         <div class="scale-item">
-                            <div class="title">Estatus/prestigio</div>
-                            <div class="desc">Búsqueda de visibilidad; defensa de imagen; competencia por reconocimiento.</div>
-                            <select name="sig_status">
-                                <option value="1">1</option><option value="2">2</option><option value="3" selected>3</option><option value="4">4</option><option value="5">5</option>
-                            </select>
+                            <div class="title">Estatus</div>
+                            <select name="sig_status"><option value="1">1</option><option value="2">2</option><option value="3" selected>3</option><option value="4">4</option><option value="5">5</option></select>
                         </div>
                         <div class="scale-item">
                             <div class="title">Autonomía</div>
-                            <div class="desc">Rechazo a microgestión; necesidad de control del método.</div>
-                            <select name="sig_autonomy">
-                                <option value="1">1</option><option value="2">2</option><option value="3" selected>3</option><option value="4">4</option><option value="5">5</option>
-                            </select>
+                            <select name="sig_autonomy"><option value="1">1</option><option value="2">2</option><option value="3" selected>3</option><option value="4">4</option><option value="5">5</option></select>
                         </div>
                         <div class="scale-item">
-                            <div class="title">Maestría/competencia</div>
-                            <div class="desc">Orgullo técnico; gusto por retos; sensibilidad a estándares.</div>
-                            <select name="sig_mastery">
-                                <option value="1">1</option><option value="2">2</option><option value="3" selected>3</option><option value="4">4</option><option value="5">5</option>
-                            </select>
+                            <div class="title">Maestría</div>
+                            <select name="sig_mastery"><option value="1">1</option><option value="2">2</option><option value="3" selected>3</option><option value="4">4</option><option value="5">5</option></select>
                         </div>
                         <div class="scale-item">
-                            <div class="title">Justicia/reciprocidad</div>
-                            <div class="desc">Reactividad a favoritismos; memoria de agravios; necesidad de procesos limpios.</div>
-                            <select name="sig_justice">
-                                <option value="1">1</option><option value="2">2</option><option value="3" selected>3</option><option value="4">4</option><option value="5">5</option>
-                            </select>
+                            <div class="title">Justicia</div>
+                            <select name="sig_justice"><option value="1">1</option><option value="2">2</option><option value="3" selected>3</option><option value="4">4</option><option value="5">5</option></select>
                         </div>
                         <div class="scale-item">
-                            <div class="title">Propósito/significado</div>
-                            <div class="desc">Energía por misión; coherencia moral; sacrificio con sentido.</div>
-                            <select name="sig_purpose">
-                                <option value="1">1</option><option value="2">2</option><option value="3" selected>3</option><option value="4">4</option><option value="5">5</option>
-                            </select>
+                            <div class="title">Propósito</div>
+                            <select name="sig_purpose"><option value="1">1</option><option value="2">2</option><option value="3" selected>3</option><option value="4">4</option><option value="5">5</option></select>
                         </div>
                         <div class="scale-item">
-                            <div class="title">Control/poder</div>
-                            <div class="desc">Necesidad de influir; territorialidad; dificultad para ceder.</div>
-                            <select name="sig_control">
-                                <option value="1">1</option><option value="2">2</option><option value="3" selected>3</option><option value="4">4</option><option value="5">5</option>
-                            </select>
+                            <div class="title">Poder/Control</div>
+                            <select name="sig_control"><option value="1">1</option><option value="2">2</option><option value="3" selected>3</option><option value="4">4</option><option value="5">5</option></select>
                         </div>
                         <div class="scale-item">
-                            <div class="title">Curiosidad/novedad</div>
-                            <div class="desc">Exploración; aburrimiento rápido; apetito por aprender.</div>
-                            <select name="sig_curiosity">
-                                <option value="1">1</option><option value="2">2</option><option value="3" selected>3</option><option value="4">4</option><option value="5">5</option>
-                            </select>
+                            <div class="title">Curiosidad</div>
+                            <select name="sig_curiosity"><option value="1">1</option><option value="2">2</option><option value="3" selected>3</option><option value="4">4</option><option value="5">5</option></select>
                         </div>
                         <div class="scale-item">
-                            <div class="title">Confort/eficiencia</div>
-                            <div class="desc">Reducción de fricción; preferencia por simplicidad; aversión a burocracia.</div>
-                            <select name="sig_comfort">
-                                <option value="1">1</option><option value="2">2</option><option value="3" selected>3</option><option value="4">4</option><option value="5">5</option>
-                            </select>
+                            <div class="title">Confort</div>
+                            <select name="sig_comfort"><option value="1">1</option><option value="2">2</option><option value="3" selected>3</option><option value="4">4</option><option value="5">5</option></select>
                         </div>
                     </div>
 
-                    <div class="fineprint">
-                        La salida se centra en liderazgo y toma de decisiones: preguntas de verificación, señales, y acciones
-                        que mejoran alineación y rendimiento. No se orienta a daño, coacción o explotación.
-                    </div>
-
-                    <button type="submit" class="submit-btn">GENERAR DIAGNÓSTICO DE MOTORES</button>
+                    <button type="submit" class="submit-btn">ANALIZAR MOTORES</button>
                 </div>
             </form>
         </div>
@@ -462,7 +518,7 @@
 
     <div id="loader">
         <div class="spinner"></div>
-        <div style="margin-top:20px; color:#d4af37;">PROCESANDO...</div>
+        <div style="margin-top:20px; color:#d4af37;">PROCESANDO INTELIGENCIA...</div>
     </div>
 </body>
 </html>
