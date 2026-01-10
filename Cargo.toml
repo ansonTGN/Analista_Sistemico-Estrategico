@@ -1,6 +1,6 @@
 [package]
 name = "analista_sistemico"
-version = "0.2.2"
+version = "0.3.0"
 edition = "2021"
 
 [dependencies]
@@ -8,11 +8,16 @@ actix-web = "4"
 actix-multipart = "0.6"
 futures = "0.3"
 serde = { version = "1", features = ["derive"] }
-serde_json = "1" # <--- Esta es la librería que faltaba
+serde_json = "1"
 tera = "1"
-reqwest = { version = "0.12", features = ["json", "rustls-tls"] }
+# Reqwest necesita "multipart" y "stream" para enviar audio
+reqwest = { version = "0.12", features = ["json", "rustls-tls", "multipart", "stream"] }
 dotenv = "0.15"
 uuid = { version = "1", features = ["v4"] }
 ammonia = "4"
 pdf-extract = "0.7"
 dotext = "0.1"
+
+# NUEVAS DEPENDENCIAS NECESARIAS PARA EL AUDIO
+tokio = { version = "1", features = ["fs", "macros", "rt-multi-thread"] }
+tokio-util = { version = "0.7", features = ["codec", "io"] }

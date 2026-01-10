@@ -6,6 +6,7 @@ mod multipart;
 mod openai;
 mod prompts;
 mod sanitize;
+mod i18n; // Modulo nuevo
 
 mod handlers;
 
@@ -21,8 +22,6 @@ async fn main() -> std::io::Result<()> {
     dotenv().ok();
 
     let cfg = AppConfig::from_env();
-
-    // Evita el "use of moved value: cfg"
     let bind_host = cfg.bind_host.clone();
     let bind_port = cfg.bind_port;
 
@@ -48,9 +47,10 @@ async fn main() -> std::io::Result<()> {
             .app_data(web::Data::new(cfg.clone()))
             .app_data(web::Data::new(tera.clone()))
             .app_data(web::Data::new(client.clone()))
-            .service(handlers::index::index)
-            .service(handlers::analyze::analyze)
-            .service(handlers::motors::motors)
+            .service(handlers::index::landing)   // Ruta /
+            .service(handlers::index::app_page)  // Ruta /app
+            .service(handlers::analyze::analyze) // Ruta /analyze
+            .service(handlers::motors::motors)   // Ruta /motors
     })
     .bind((bind_host.as_str(), bind_port))?
     .run()

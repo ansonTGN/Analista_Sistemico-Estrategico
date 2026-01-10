@@ -1,525 +1,235 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="{{ lang }}">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Urbina & Meadows | Strategic Core</title>
+    <title>{{ t.title }}</title>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg: #0a0e17;
-            --card: #111827;
-            --text: #e2e8f0;
-            --accent: #d4af37;
-            --input-bg: #0f172a;
-            --muted: #64748b;
-            --border: #1e293b;
+            --bg: #0a0e17; --card: #111827; --text: #e2e8f0; --accent: #d4af37;
+            --input-bg: #0f172a; --muted: #64748b; --border: #1e293b;
         }
-
-        body {
-            background-color: var(--bg);
-            font-family: 'Inter', sans-serif;
-            color: var(--text);
-            margin: 0;
-            padding: 15px; /* Menos padding en móvil */
-        }
-
+        body { background-color: var(--bg); font-family: 'Inter', sans-serif; color: var(--text); margin: 0; padding: 15px; }
         .container { max-width: 900px; margin: 0 auto; }
-
-        /* HEADER & ACTIONS */
-        .header-actions {
-            display: flex;
-            justify-content: flex-end;
-            gap: 12px;
-            margin-bottom: 20px;
-            flex-wrap: wrap; /* Permite que bajen en móvil */
-        }
-        .action-btn {
-            background: rgba(30, 41, 59, 0.5);
-            border: 1px solid #334155;
-            color: #94a3b8;
-            padding: 10px 14px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 0.85rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            transition: all 0.2s;
-            font-weight: 600;
-        }
-        .action-btn:hover {
-            border-color: var(--accent);
-            color: var(--accent);
-            background: rgba(212, 175, 55, 0.05);
-        }
-
-        h1 {
-            font-family: 'Cinzel', serif;
-            color: var(--accent);
-            font-size: 1.6rem;
-            text-align: center;
-            margin-bottom: 5px;
-            margin-top: 0;
-            line-height: 1.2;
-        }
-
-        .subtitle {
-            text-align: center;
-            font-size: 0.7rem;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            color: var(--muted);
-            margin-bottom: 18px;
-        }
-
-        .form-card {
-            background: var(--card);
-            padding: 20px;
-            border-radius: 12px;
-            border: 1px solid var(--border);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-        }
-
-        /* SWITCHER DE MODO */
-        .mode-switch {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-            margin-bottom: 14px;
-        }
-        .mode-btn {
-            background: transparent;
-            border: 1px solid #334155;
-            color: #94a3b8;
-            padding: 12px 5px;
-            border-radius: 10px;
-            cursor: pointer;
-            font-size: 0.85rem;
-            text-align: center;
-            font-weight: 600;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 5px;
-        }
-        .mode-btn.active {
-            border-color: var(--accent);
-            color: var(--accent);
-            background: rgba(212, 175, 55, 0.12);
-        }
-
+        .header-actions { display: flex; justify-content: space-between; margin-bottom: 20px; align-items: center; }
+        .back-link { color: var(--muted); text-decoration: none; font-size: 0.9rem; }
+        .action-btn { background: rgba(30, 41, 59, 0.5); border: 1px solid #334155; color: #94a3b8; padding: 10px 14px; border-radius: 6px; cursor: pointer; }
+        h1 { font-family: 'Cinzel', serif; color: var(--accent); font-size: 1.6rem; text-align: center; margin: 0; }
+        .subtitle { text-align: center; font-size: 0.7rem; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); margin-bottom: 18px; }
+        .form-card { background: var(--card); padding: 20px; border-radius: 12px; border: 1px solid var(--border); box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        .mode-switch { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 14px; }
+        .mode-btn { background: transparent; border: 1px solid #334155; color: #94a3b8; padding: 12px; border-radius: 10px; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 5px; }
+        .mode-btn.active { border-color: var(--accent); color: var(--accent); background: rgba(212, 175, 55, 0.12); }
         .mode-panel { display: none; }
         .mode-panel.active { display: block; }
-
-        .tabs { display: flex; gap: 10px; margin-bottom: 10px; }
-        .tab-btn {
-            background: transparent;
-            border: 1px solid #334155;
-            color: #94a3b8;
-            padding: 10px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 0.85rem;
-            flex: 1;
-            text-align: center;
-        }
-        .tab-btn.active {
-            border-color: var(--accent);
-            color: var(--accent);
-            background: rgba(212, 175, 55, 0.12);
-        }
-
+        .tabs { display: flex; gap: 5px; margin-bottom: 10px; }
+        .tab-btn { background: transparent; border: 1px solid #334155; color: #94a3b8; padding: 8px; border-radius: 6px; cursor: pointer; flex: 1; font-size: 0.8rem; }
+        .tab-btn.active { border-color: var(--accent); color: var(--accent); background: rgba(212, 175, 55, 0.12); }
         .input-group { display: none; }
         .input-group.active { display: block; }
-
-        label {
-            display: block;
-            margin-top: 20px;
-            color: var(--accent);
-            font-family: 'Cinzel', serif;
-            font-size: 0.95rem;
-        }
-
-        textarea, input[type="file"], input[type="text"], select {
-            width: 100%;
-            background: var(--input-bg);
-            border: 1px solid #334155;
-            color: white;
-            padding: 12px;
-            border-radius: 10px;
-            box-sizing: border-box;
-            font-family: 'Inter', sans-serif;
-            font-size: 16px; /* 16px evita zoom en iOS */
-        }
-        textarea { resize: vertical; }
-
+        label { display: block; margin-top: 20px; color: var(--accent); font-family: 'Cinzel', serif; font-size: 0.95rem; }
+        textarea, input[type="text"], select, input[type="file"] { width: 100%; background: var(--input-bg); border: 1px solid #334155; color: white; padding: 12px; border-radius: 10px; box-sizing: border-box; font-family: 'Inter', sans-serif; font-size: 16px; }
         .grid-2 { display: grid; grid-template-columns: 1fr; gap: 15px; }
-        
-        .scale-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr; /* 2 columnas en móvil por defecto */
-            gap: 10px;
-            margin-top: 10px;
-        }
-
-        .scale-item {
-            border: 1px solid #223049;
-            border-radius: 12px;
-            padding: 12px;
-            background: rgba(15,23,42,0.35);
-        }
-        .scale-item .title {
-            color: var(--text);
-            font-weight: 700;
-            margin-bottom: 6px;
-            font-size: 0.85rem;
-        }
-        .scale-item select { font-size: 0.95rem; padding: 8px; }
-
-        button.submit-btn {
-            margin-top: 25px;
-            width: 100%;
-            padding: 18px;
-            background: var(--accent);
-            color: var(--bg);
-            border: none;
-            font-family: 'Cinzel', serif;
-            font-weight: bold;
-            font-size: 1rem;
-            cursor: pointer;
-            border-radius: 12px;
-            -webkit-tap-highlight-color: transparent;
-        }
-        button.submit-btn:active { transform: translateY(2px); }
-
-        .methodology-badge {
-            background: rgba(212, 175, 55, 0.1);
-            border: 1px solid var(--accent);
-            color: var(--accent);
-            padding: 2px 6px;
-            font-size: 0.6rem;
-            border-radius: 4px;
-            letter-spacing: 1px;
-        }
-
-        /* --- MEDIA QUERIES PARA MÓVIL --- */
-        @media (min-width: 860px) {
-            .grid-2 { grid-template-columns: 1fr 1fr; }
-            .scale-grid { grid-template-columns: 1fr 1fr; }
-            .mode-btn { flex-direction: row; justify-content: center; gap: 10px; }
-        }
-
-        @media (max-width: 600px) {
-            h1 { font-size: 1.4rem; }
-            .form-card { padding: 15px; }
-            .header-actions { justify-content: stretch; }
-            .action-btn { width: 100%; } /* Botones full width en móvil */
-            
-            /* Ajuste de escala en pantallas muy pequeñas */
-            .scale-grid { grid-template-columns: 1fr 1fr; } 
-        }
-
-        #loader {
-            display: none;
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(10,14,23,0.95);
-            z-index: 2000;
-            justify-content: center; align-items: center; flex-direction: column;
-            padding: 20px; text-align: center;
-        }
+        .scale-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px; }
+        .scale-item { border: 1px solid #223049; border-radius: 12px; padding: 12px; background: rgba(15,23,42,0.35); }
+        button.submit-btn { margin-top: 25px; width: 100%; padding: 18px; background: var(--accent); color: var(--bg); border: none; font-family: 'Cinzel', serif; font-weight: bold; font-size: 1rem; cursor: pointer; border-radius: 12px; }
+        .rec-controls { display: flex; gap: 10px; align-items: center; margin-top: 10px; }
+        .rec-btn { background: #ef4444; color: white; border: none; padding: 8px 16px; border-radius: 20px; cursor: pointer; font-weight: bold; }
+        .rec-btn.recording { animation: pulse 1.5s infinite; }
+        .audio-status { font-size: 0.8rem; color: var(--accent); }
+        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
+        @media (min-width: 860px) { .grid-2, .scale-grid { grid-template-columns: 1fr 1fr; } }
+        #loader { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(10,14,23,0.95); z-index: 2000; justify-content: center; align-items: center; flex-direction: column; text-align: center; }
         .spinner { width: 44px; height: 44px; border: 3px solid #333; border-top: 3px solid var(--accent); border-radius: 50%; animation: spin 1s infinite linear; }
         @keyframes spin { 100% { transform: rotate(360deg); } }
     </style>
-
     <script>
-        // --- LOGICA DE TABS ---
-        function switchTab(groupName, mode) {
-            document.getElementById(groupName + '-text-input').classList.toggle('active', mode === 'text');
-            document.getElementById(groupName + '-file-input').classList.toggle('active', mode === 'file');
-            document.getElementById(groupName + '-btn-text').classList.toggle('active', mode === 'text');
-            document.getElementById(groupName + '-btn-file').classList.toggle('active', mode === 'file');
-
-            if (mode === 'text') document.querySelector(`#${groupName}-file-input input`).value = "";
-            if (mode === 'file') document.querySelector(`#${groupName}-text-input textarea`).value = "";
+        function switchTab(group, mode) {
+            document.getElementById(group+'-text').classList.toggle('active', mode==='text');
+            document.getElementById(group+'-file').classList.toggle('active', mode==='file');
+            document.getElementById(group+'-audio').classList.toggle('active', mode==='audio');
+            
+            document.getElementById(group+'-btn-text').classList.toggle('active', mode==='text');
+            document.getElementById(group+'-btn-file').classList.toggle('active', mode==='file');
+            document.getElementById(group+'-btn-audio').classList.toggle('active', mode==='audio');
         }
 
-        // --- LOGICA DE MODOS ---
         function switchMode(mode) {
-            const form = document.getElementById('main-form');
-            const sysPanel = document.getElementById('mode-system');
-            const motPanel = document.getElementById('mode-motors');
-            const sysBtn = document.getElementById('mode-btn-system');
-            const motBtn = document.getElementById('mode-btn-motors');
-
-            const isMotors = (mode === 'motors');
-
-            sysPanel.classList.toggle('active', !isMotors);
-            motPanel.classList.toggle('active', isMotors);
-            sysBtn.classList.toggle('active', !isMotors);
-            motBtn.classList.toggle('active', isMotors);
-
-            form.action = isMotors ? "/motors" : "/analyze";
-
-            const sysEls = sysPanel.querySelectorAll('input, textarea, select');
-            const motEls = motPanel.querySelectorAll('input, textarea, select');
+            const isMotors = mode === 'motors';
+            document.getElementById('mode-system').classList.toggle('active', !isMotors);
+            document.getElementById('mode-motors').classList.toggle('active', isMotors);
+            document.getElementById('mode-btn-sys').classList.toggle('active', !isMotors);
+            document.getElementById('mode-btn-mot').classList.toggle('active', isMotors);
+            document.getElementById('main-form').action = isMotors ? "/motors" : "/analyze";
             
+            const sysEls = document.getElementById('mode-system').querySelectorAll('input,textarea,select');
+            const motEls = document.getElementById('mode-motors').querySelectorAll('input,textarea,select');
             sysEls.forEach(el => el.disabled = isMotors);
             motEls.forEach(el => el.disabled = !isMotors);
-
-            document.getElementById('mode').value = isMotors ? "motors" : "system";
         }
 
-        // --- IMPORTAR / EXPORTAR (JSON) ---
-        function exportDraft() {
-            const form = document.getElementById('main-form');
-            const formData = new FormData(form);
-            const data = {};
-            
-            formData.forEach((value, key) => {
-                if (!(value instanceof File)) {
-                    data[key] = value;
-                }
-            });
-            
-            document.querySelectorAll('textarea, select, input[type="text"]').forEach(el => {
-                if (el.name) data[el.name] = el.value;
-            });
+        // --- AUDIO RECORDER LOGIC ---
+        let mediaRecorder;
+        let audioChunks = [];
+        
+        async function toggleRecord(groupId) {
+            const btn = document.getElementById(groupId + '-rec-btn');
+            const status = document.getElementById(groupId + '-status');
+            const input = document.getElementById(groupId + '-audio-file');
 
-            const jsonStr = JSON.stringify(data, null, 2);
-            const blob = new Blob([jsonStr], { type: 'application/json' });
-            const url = URL.createObjectURL(blob);
-            
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `Borrador_Caso_${Date.now()}.json`;
-            document.body.appendChild(a);
-            a.click();
-            setTimeout(() => { document.body.removeChild(a); URL.revokeObjectURL(url); }, 1000);
-        }
-
-        function importCase(input) {
-            const file = input.files[0];
-            if (!file) return;
-
-            const reader = new FileReader();
-            reader.onload = function(e) {
+            if (btn.classList.contains('recording')) {
+                // STOP RECORDING
+                mediaRecorder.stop();
+                btn.classList.remove('recording');
+                btn.innerHTML = "{{ t.rec_start }}";
+            } else {
+                // START RECORDING
                 try {
-                    const data = JSON.parse(e.target.result);
-                    populateForm(data);
+                    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                    mediaRecorder = new MediaRecorder(stream);
+                    audioChunks = [];
+                    mediaRecorder.ondataavailable = event => audioChunks.push(event.data);
+                    mediaRecorder.onstop = () => {
+                        const audioBlob = new Blob(audioChunks, { type: 'audio/mp3' }); // Usually webm/mp3
+                        const file = new File([audioBlob], "recording.mp3", { type: "audio/mp3" });
+                        
+                        // Transfer to input
+                        const dataTransfer = new DataTransfer();
+                        dataTransfer.items.add(file);
+                        input.files = dataTransfer.files;
+                        status.innerText = "Audio OK (" + (file.size/1024).toFixed(1) + " KB)";
+                    };
+                    mediaRecorder.start();
+                    btn.classList.add('recording');
+                    btn.innerHTML = "{{ t.rec_stop }}";
+                    status.innerText = "Recording...";
                 } catch (err) {
-                    alert("Error al leer JSON: " + err.message);
-                }
-            };
-            reader.readAsText(file);
-            input.value = '';
-        }
-
-        function populateForm(data) {
-            if (data.mode) {
-                switchMode(data.mode);
-            } else if (data.signals) {
-                switchMode('motors');
-            }
-
-            for (const [key, value] of Object.entries(data)) {
-                if (key === 'signals' && typeof value === 'object') {
-                    for (const [sKey, sVal] of Object.entries(value)) {
-                        const el = document.getElementsByName(sKey)[0];
-                        if (el) el.value = sVal;
-                    }
-                    continue;
-                }
-
-                const el = document.getElementsByName(key)[0];
-                if (el) {
-                    el.value = value;
-                    el.disabled = false;
+                    alert("Mic Error: " + err.message);
                 }
             }
-
-            if (data.m_context && data.m_context.length > 5) switchTab('mctx', 'text');
-            if (data.m_observations && data.m_observations.length > 5) switchTab('mobsv', 'text');
-            if (data.situation && data.situation.length > 5) switchTab('sit', 'text');
-            if (data.cv && data.cv.length > 5) switchTab('cv', 'text');
-
-            alert("Datos restaurados correctamente.");
         }
-
-        window.addEventListener('DOMContentLoaded', () => {
-            switchMode('motors');
-        });
     </script>
 </head>
-<body>
+<body onload="switchMode('motors')">
     <div class="container">
         <div class="header-actions">
-            <button class="action-btn" onclick="document.getElementById('json-upload').click()">
-                📂 Cargar Caso
-            </button>
-            <button class="action-btn" onclick="exportDraft()">
-                💾 Guardar
-            </button>
-            <input type="file" id="json-upload" accept=".json" style="display:none" onchange="importCase(this)">
+            <a href="/" class="back-link">← Home</a>
+            <div>
+                <button class="action-btn" onclick="document.getElementById('json-upload').click()">📂 JSON</button>
+                <input type="file" id="json-upload" accept=".json" style="display:none">
+            </div>
         </div>
 
-        <h1>Analista Estratégico</h1>
-        <div class="subtitle">DIAGNÓSTICO OPERATIVO Y MOTORES HUMANOS</div>
+        <h1>{{ t.title }}</h1>
+        <div class="subtitle">{{ t.subtitle }}</div>
 
         <div class="form-card">
             <div class="mode-switch">
-                <button id="mode-btn-system" class="mode-btn" type="button" onclick="switchMode('system')">
-                    Análisis Sistémico <span class="methodology-badge">PESTEL</span>
-                </button>
-                <button id="mode-btn-motors" class="mode-btn" type="button" onclick="switchMode('motors')">
-                    Motores Humanos <span class="methodology-badge">HUMINT</span>
-                </button>
+                <button id="mode-btn-sys" class="mode-btn" onclick="switchMode('system')">{{ t.tab_system }} <span>PESTEL</span></button>
+                <button id="mode-btn-mot" class="mode-btn active" onclick="switchMode('motors')">{{ t.tab_motors }} <span>HUMINT</span></button>
             </div>
 
-            <form id="main-form" action="/motors" method="post" enctype="multipart/form-data"
-                  onsubmit="document.getElementById('loader').style.display='flex'">
+            <form id="main-form" action="/motors" method="post" enctype="multipart/form-data" onsubmit="document.getElementById('loader').style.display='flex'">
+                <input type="hidden" name="lang" value="{{ lang }}">
 
-                <input type="hidden" id="mode" name="mode" value="motors" />
-
-                <!-- MODO SISTÉMICO -->
+                <!-- SYSTEM MODE -->
                 <div id="mode-system" class="mode-panel">
-                    <label>I. Contexto Operativo</label>
+                    <label>{{ t.lbl_situation }}</label>
                     <div class="tabs">
-                        <button id="sit-btn-text" class="tab-btn active" type="button" onclick="switchTab('sit', 'text')">Escribir</button>
-                        <button id="sit-btn-file" class="tab-btn" type="button" onclick="switchTab('sit', 'file')">Archivo</button>
+                        <button type="button" id="sit-btn-text" class="tab-btn active" onclick="switchTab('sit','text')">{{ t.btn_text }}</button>
+                        <button type="button" id="sit-btn-file" class="tab-btn" onclick="switchTab('sit','file')">{{ t.btn_file }}</button>
+                        <button type="button" id="sit-btn-audio" class="tab-btn" onclick="switchTab('sit','audio')">{{ t.btn_audio }}</button>
                     </div>
-                    <div id="sit-text-input" class="input-group active">
-                        <textarea name="situation" rows="4" placeholder="Describa el problema..."></textarea>
-                    </div>
-                    <div id="sit-file-input" class="input-group">
-                        <input type="file" name="situation_file" accept=".pdf,.docx,.txt,.md">
+                    <div id="sit-text" class="input-group active"><textarea name="situation" rows="4" placeholder="{{ t.ph_situation }}"></textarea></div>
+                    <div id="sit-file" class="input-group"><input type="file" name="situation_file"></div>
+                    <div id="sit-audio" class="input-group">
+                        <div class="rec-controls">
+                            <button type="button" id="sit-rec-btn" class="rec-btn" onclick="toggleRecord('sit')">{{ t.rec_start }}</button>
+                            <span id="sit-status" class="audio-status"></span>
+                        </div>
+                        <input type="file" id="sit-audio-file" name="situation_audio" accept="audio/*" style="display:none">
                     </div>
 
-                    <label>II. Perfil del Agente (CV)</label>
+                    <label>{{ t.lbl_cv }}</label>
                     <div class="tabs">
-                        <button id="cv-btn-text" class="tab-btn active" type="button" onclick="switchTab('cv', 'text')">Escribir</button>
-                        <button id="cv-btn-file" class="tab-btn" type="button" onclick="switchTab('cv', 'file')">Archivo</button>
+                        <button type="button" id="cv-btn-text" class="tab-btn active" onclick="switchTab('cv','text')">{{ t.btn_text }}</button>
+                        <button type="button" id="cv-btn-file" class="tab-btn" onclick="switchTab('cv','file')">{{ t.btn_file }}</button>
                     </div>
-                    <div id="cv-text-input" class="input-group active">
-                        <textarea name="cv" rows="6" placeholder="Trayectoria..."></textarea>
-                    </div>
-                    <div id="cv-file-input" class="input-group">
-                        <input type="file" name="cv_file" accept=".pdf,.docx,.txt,.md">
-                    </div>
+                    <div id="cv-text" class="input-group active"><textarea name="cv" rows="6" placeholder="{{ t.ph_cv }}"></textarea></div>
+                    <div id="cv-file" class="input-group"><input type="file" name="cv_file"></div>
 
-                    <label>III. Foco Estratégico</label>
-                    <textarea name="extra_questions" rows="2" placeholder="¿Dudas concretas?"></textarea>
-
-                    <button type="submit" class="submit-btn">INICIAR ANÁLISIS</button>
+                    <label>{{ t.lbl_focus }}</label>
+                    <textarea name="extra_questions" rows="2" placeholder="{{ t.ph_focus }}"></textarea>
+                    
+                    <button type="submit" class="submit-btn">{{ t.btn_analyze }}</button>
                 </div>
 
-                <!-- MODO MOTORES -->
-                <div id="mode-motors" class="mode-panel">
-                    <label>I. Persona y Relación</label>
+                <!-- MOTORS MODE -->
+                <div id="mode-motors" class="mode-panel active">
                     <div class="grid-2">
+                        <div><label>{{ t.lbl_target }}</label><input type="text" name="target_name"></div>
                         <div>
-                            <label style="margin-top:0">Nombre/Rol</label>
-                            <input type="text" name="target_name" placeholder="Ej.: Jefe de Ventas">
-                        </div>
-                        <div>
-                            <label style="margin-top:0">Relación</label>
+                            <label>{{ t.lbl_relation }}</label>
                             <select name="relationship">
-                                <option value="equipo">Mi equipo / Reporte directo</option>
-                                <option value="jefe">Mi jefe / Superior</option>
-                                <option value="par">Par / Colaborador transversal</option>
-                                <option value="cliente">Cliente / Stakeholder</option>
-                                <option value="proveedor">Proveedor / Socio externo</option>
-                                <option value="adversario">Adversario / Rival táctico</option>
-                                <option value="candidato">Candidato / Talento</option>
-                                <option value="regulador">Regulador / Institucional</option>
-                                <option value="otro">Otro / Red compleja</option>
+                                <option value="equipo">Team</option>
+                                <option value="jefe">Boss</option>
+                                <option value="par">Peer</option>
+                                <option value="cliente">Client</option>
+                                <option value="adversario">Adversary</option>
                             </select>
                         </div>
                     </div>
 
-                    <label>II. Contexto (Presión, cultura, incentivos)</label>
+                    <label>{{ t.lbl_m_context }}</label>
                     <div class="tabs">
-                        <button id="mctx-btn-text" class="tab-btn active" type="button" onclick="switchTab('mctx', 'text')">Escribir</button>
-                        <button id="mctx-btn-file" class="tab-btn" type="button" onclick="switchTab('mctx', 'file')">Archivo</button>
+                        <button type="button" id="mctx-btn-text" class="tab-btn active" onclick="switchTab('mctx','text')">{{ t.btn_text }}</button>
+                        <button type="button" id="mctx-btn-file" class="tab-btn" onclick="switchTab('mctx','file')">{{ t.btn_file }}</button>
+                        <button type="button" id="mctx-btn-audio" class="tab-btn" onclick="switchTab('mctx','audio')">{{ t.btn_audio }}</button>
                     </div>
-                    <div id="mctx-text-input" class="input-group active">
-                        <textarea name="m_context" rows="4" placeholder="¿Qué está en juego? ¿Reglas no escritas?"></textarea>
-                    </div>
-                    <div id="mctx-file-input" class="input-group">
-                        <input type="file" name="m_context_file" accept=".pdf,.docx,.txt,.md">
+                    <div id="mctx-text" class="input-group active"><textarea name="m_context" rows="4" placeholder="{{ t.ph_m_context }}"></textarea></div>
+                    <div id="mctx-file" class="input-group"><input type="file" name="m_context_file"></div>
+                    <div id="mctx-audio" class="input-group">
+                        <div class="rec-controls">
+                            <button type="button" id="mctx-rec-btn" class="rec-btn" onclick="toggleRecord('mctx')">{{ t.rec_start }}</button>
+                            <span id="mctx-status" class="audio-status"></span>
+                        </div>
+                        <input type="file" id="mctx-audio-file" name="m_context_audio" accept="audio/*" style="display:none">
                     </div>
 
-                    <label>III. Observaciones (Hechos, frases, reacciones)</label>
+                    <label>{{ t.lbl_m_obs }}</label>
                     <div class="tabs">
-                        <button id="mobsv-btn-text" class="tab-btn active" type="button" onclick="switchTab('mobsv', 'text')">Escribir</button>
-                        <button id="mobsv-btn-file" class="tab-btn" type="button" onclick="switchTab('mobsv', 'file')">Archivo</button>
+                        <button type="button" id="mobs-btn-text" class="tab-btn active" onclick="switchTab('mobs','text')">{{ t.btn_text }}</button>
+                        <button type="button" id="mobs-btn-file" class="tab-btn" onclick="switchTab('mobs','file')">{{ t.btn_file }}</button>
+                        <button type="button" id="mobs-btn-audio" class="tab-btn" onclick="switchTab('mobs','audio')">{{ t.btn_audio }}</button>
                     </div>
-                    <div id="mobsv-text-input" class="input-group active">
-                        <textarea name="m_observations" rows="6" placeholder="Bajo estrés hace X... Cuando se le corrige hace Y..."></textarea>
-                    </div>
-                    <div id="mobsv-file-input" class="input-group">
-                        <input type="file" name="m_observations_file" accept=".pdf,.docx,.txt,.md">
+                    <div id="mobs-text" class="input-group active"><textarea name="m_observations" rows="6" placeholder="{{ t.ph_m_obs }}"></textarea></div>
+                    <div id="mobs-file" class="input-group"><input type="file" name="m_observations_file"></div>
+                    <div id="mobs-audio" class="input-group">
+                        <div class="rec-controls">
+                            <button type="button" id="mobs-rec-btn" class="rec-btn" onclick="toggleRecord('mobs')">{{ t.rec_start }}</button>
+                            <span id="mobs-status" class="audio-status"></span>
+                        </div>
+                        <input type="file" id="mobs-audio-file" name="m_observations_audio" accept="audio/*" style="display:none">
                     </div>
 
-                    <label>IV. Objetivo</label>
-                    <textarea name="m_goal" rows="2" placeholder="Ej.: Alinear equipo, negociar subida, desescalar conflicto..."></textarea>
+                    <label>{{ t.lbl_m_goal }}</label>
+                    <textarea name="m_goal" rows="2" placeholder="{{ t.ph_m_goal }}"></textarea>
 
-                    <label>V. Señales Rápidas (1-5)</label>
-                    <div class="hint">1: Nada importante / 5: Crítico para la persona</div>
+                    <label>{{ t.lbl_signals }}</label>
                     <div class="scale-grid">
-                        <div class="scale-item">
-                            <div class="title">Seguridad</div>
-                            <select name="sig_security"><option value="1">1</option><option value="2">2</option><option value="3" selected>3</option><option value="4">4</option><option value="5">5</option></select>
-                        </div>
-                        <div class="scale-item">
-                            <div class="title">Pertenencia</div>
-                            <select name="sig_belonging"><option value="1">1</option><option value="2">2</option><option value="3" selected>3</option><option value="4">4</option><option value="5">5</option></select>
-                        </div>
-                        <div class="scale-item">
-                            <div class="title">Estatus</div>
-                            <select name="sig_status"><option value="1">1</option><option value="2">2</option><option value="3" selected>3</option><option value="4">4</option><option value="5">5</option></select>
-                        </div>
-                        <div class="scale-item">
-                            <div class="title">Autonomía</div>
-                            <select name="sig_autonomy"><option value="1">1</option><option value="2">2</option><option value="3" selected>3</option><option value="4">4</option><option value="5">5</option></select>
-                        </div>
-                        <div class="scale-item">
-                            <div class="title">Maestría</div>
-                            <select name="sig_mastery"><option value="1">1</option><option value="2">2</option><option value="3" selected>3</option><option value="4">4</option><option value="5">5</option></select>
-                        </div>
-                        <div class="scale-item">
-                            <div class="title">Justicia</div>
-                            <select name="sig_justice"><option value="1">1</option><option value="2">2</option><option value="3" selected>3</option><option value="4">4</option><option value="5">5</option></select>
-                        </div>
-                        <div class="scale-item">
-                            <div class="title">Propósito</div>
-                            <select name="sig_purpose"><option value="1">1</option><option value="2">2</option><option value="3" selected>3</option><option value="4">4</option><option value="5">5</option></select>
-                        </div>
-                        <div class="scale-item">
-                            <div class="title">Poder/Control</div>
-                            <select name="sig_control"><option value="1">1</option><option value="2">2</option><option value="3" selected>3</option><option value="4">4</option><option value="5">5</option></select>
-                        </div>
-                        <div class="scale-item">
-                            <div class="title">Curiosidad</div>
-                            <select name="sig_curiosity"><option value="1">1</option><option value="2">2</option><option value="3" selected>3</option><option value="4">4</option><option value="5">5</option></select>
-                        </div>
-                        <div class="scale-item">
-                            <div class="title">Confort</div>
-                            <select name="sig_comfort"><option value="1">1</option><option value="2">2</option><option value="3" selected>3</option><option value="4">4</option><option value="5">5</option></select>
-                        </div>
+                        <div class="scale-item"><div class="title">Security</div><select name="sig_security"><option>1</option><option>2</option><option selected>3</option><option>4</option><option>5</option></select></div>
+                        <div class="scale-item"><div class="title">Status</div><select name="sig_status"><option>1</option><option>2</option><option selected>3</option><option>4</option><option>5</option></select></div>
+                        <div class="scale-item"><div class="title">Autonomy</div><select name="sig_autonomy"><option>1</option><option>2</option><option selected>3</option><option>4</option><option>5</option></select></div>
+                        <div class="scale-item"><div class="title">Justice</div><select name="sig_justice"><option>1</option><option>2</option><option selected>3</option><option>4</option><option>5</option></select></div>
                     </div>
 
-                    <button type="submit" class="submit-btn">ANALIZAR MOTORES</button>
+                    <button type="submit" class="submit-btn">{{ t.btn_motors }}</button>
                 </div>
             </form>
         </div>
     </div>
-
-    <div id="loader">
-        <div class="spinner"></div>
-        <div style="margin-top:20px; color:#d4af37;">PROCESANDO INTELIGENCIA...</div>
-    </div>
+    <div id="loader"><div class="spinner"></div><div style="margin-top:20px; color:#d4af37;">{{ t.loading }}</div></div>
 </body>
 </html>
 

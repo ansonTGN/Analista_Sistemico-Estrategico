@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <!-- Viewport crítico para móviles: evita que se vea pequeño -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Human Intelligence & Systemic Analyst</title>
+    
+    <!-- Preload de fuentes para evitar parpadeos -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Inter:wght@300;400;600&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg: #050505;
+            --card-bg: rgba(15, 15, 15, 0.85);
+            --accent: #d4af37; /* Oro Clásico */
+            --accent-glow: rgba(212, 175, 55, 0.25);
+            --text: #e2e8f0;
+            --muted: #94a3b8;
+        }
+
+        * {
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent; /* Elimina flash azul en móviles */
+        }
+
+        body { 
+            background: var(--bg); 
+            color: var(--text); 
+            font-family: 'Inter', sans-serif;
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            justify-content: center;
+            min-height: 100vh; /* Usar min-height para evitar cortes en móvil horizontal */
+            margin: 0; 
+            padding: 20px;
+            overflow-x: hidden; /* Evita scroll lateral */
+            background-image: radial-gradient(circle at center, #1a1a1a 0%, #050505 80%);
+        }
+
+        /* --- CONTENEDOR PRINCIPAL --- */
+        .landing-container {
+            text-align: center;
+            width: 100%;
+            max-width: 750px; /* Límite para PC */
+            padding: 40px;
+            
+            border: 1px solid #333;
+            background: var(--card-bg);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px); /* Safari Mobile */
+            border-radius: 12px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.6);
+            
+            animation: fadeIn 1.2s cubic-bezier(0.22, 1, 0.36, 1);
+            position: relative;
+            z-index: 10;
+        }
+
+        /* --- TIPOGRAFÍA --- */
+        h1 { 
+            font-family: 'Cinzel', serif; 
+            color: var(--accent); 
+            /* Tamaño fluido: mínimo 1.5rem, ideal 5vw, máximo 2.5rem */
+            font-size: clamp(1.6rem, 5vw, 2.5rem); 
+            margin: 0 0 10px 0; 
+            line-height: 1.2;
+            text-shadow: 0 0 15px var(--accent-glow);
+        }
+
+        .version-tag {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem;
+            color: var(--muted);
+            border: 1px solid #333;
+            padding: 4px 10px;
+            border-radius: 20px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 25px;
+            display: inline-block;
+            background: rgba(0,0,0,0.3);
+        }
+
+        p#intro-text { 
+            font-size: clamp(0.95rem, 2vw, 1.1rem); /* Texto legible en móvil */
+            line-height: 1.6; 
+            color: #cbd5e1; 
+            margin-bottom: 35px; 
+            min-height: 70px; /* Evita saltos visuales al cambiar idioma */
+            padding: 0 10px;
+        }
+
+        /* --- SELECTOR DE IDIOMA --- */
+        .lang-selector { 
+            display: flex; 
+            gap: 12px; 
+            justify-content: center; 
+            margin-bottom: 35px;
+            flex-wrap: wrap; /* Importante: permite que bajen si no caben */
+        }
+
+        .lang-btn {
+            background: transparent;
+            border: 1px solid #475569;
+            color: #94a3b8;
+            padding: 12px 24px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            transition: all 0.2s ease;
+            flex: 1 1 auto; /* Botones crecen para llenar espacio en móvil */
+            min-width: 90px;
+            max-width: 150px;
+        }
+
+        .lang-btn:active { transform: scale(0.96); } /* Feedback táctil */
+
+        .lang-btn.active {
+            border-color: var(--accent);
+            background: rgba(212, 175, 55, 0.15);
+            color: var(--accent);
+            font-weight: bold;
+            box-shadow: 0 0 15px var(--accent-glow);
+        }
+
+        /* --- BOTÓN DE ENTRADA (CTA) --- */
+        #enter-btn {
+            display: block;
+            width: 100%; /* Ancho completo en móvil */
+            max-width: 400px; /* Tope en escritorio */
+            margin: 0 auto;
+            
+            background: transparent;
+            color: var(--accent);
+            border: 1px solid var(--accent);
+            padding: 18px 20px;
+            
+            font-size: 1rem;
+            font-family: 'Cinzel', serif;
+            letter-spacing: 2px;
+            font-weight: 700;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        #enter-btn:hover {
+            background: var(--accent);
+            color: #050505;
+            box-shadow: 0 0 30px var(--accent-glow);
+            transform: translateY(-2px);
+        }
+        
+        #enter-btn:active { transform: translateY(0); }
+
+        /* --- FOOTER --- */
+        .footer { 
+            margin-top: 40px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem; 
+            color: #475569; 
+            text-align: center;
+            width: 100%;
+            opacity: 0.8;
+        }
+
+        /* --- MEDIA QUERIES (AJUSTES MÓVILES) --- */
+        @media (max-width: 600px) {
+            .landing-container {
+                padding: 30px 20px; /* Menos padding lateral */
+                width: 100%;
+                border: none; /* Borde más limpio en móvil */
+                background: rgba(10, 10, 10, 0.5); /* Fondo más ligero */
+            }
+
+            h1 { margin-bottom: 5px; }
+
+            .version-tag { margin-bottom: 20px; font-size: 0.65rem; }
+
+            p#intro-text { 
+                margin-bottom: 30px; 
+                font-size: 0.95rem; /* Letra un poco más pequeña pero legible */
+            }
+
+            .lang-selector { gap: 8px; }
+            
+            .lang-btn { 
+                padding: 10px 15px; 
+                font-size: 0.8rem;
+            }
+
+            #enter-btn {
+                padding: 16px;
+                font-size: 0.95rem;
+                letter-spacing: 1px; /* Menos espaciado para que quepa texto largo */
+            }
+
+            .footer { 
+                position: relative; 
+                bottom: auto; 
+                margin-top: 30px;
+            }
+        }
+        
+        /* Animación de entrada */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="landing-container">
+        <h1>HUMAN & SYSTEMIC ANALYST</h1>
+        <div class="version-tag">CORE v2.2 // AUTH: ANGEL A. URBINA 2026</div>
+
+        <!-- Texto Dinámico -->
+        <p id="intro-text">
+            Cargando interfaz...
+        </p>
+
+        <!-- Selector de Idioma -->
+        <div class="lang-selector">
+            <!-- onTouchStart mejora la respuesta en iOS -->
+            <button class="lang-btn active" onclick="setLanguage('es', this)">ESPAÑOL</button>
+            <button class="lang-btn" onclick="setLanguage('cat', this)">CATALÀ</button>
+            <button class="lang-btn" onclick="setLanguage('en', this)">ENGLISH</button>
+        </div>
+
+        <!-- Botón de Entrada -->
+        <button id="enter-btn" onclick="enterSystem()">
+            ENTRAR AL SISTEMA
+        </button>
+        
+        <div class="footer">
+            Angel A. Urbina 2026 &copy; All Rights Reserved.<br>Authorized Personnel Only.
+        </div>
+    </div>
+
+    <script>
+        // Contenido multilingüe
+        const content = {
+            es: {
+                text: "Suite de inteligencia operativa. Transforme datos no estructurados (audio, documentos, contexto) en mapas sistémicos de poder y perfiles conductuales.",
+                btn: "ACCEDER A CONSOLA",
+                title: "ANALISTA SISTÉMICO"
+            },
+            cat: {
+                text: "Suite d'intel·ligència operativa. Transformeu dades no estructurades (àudio, documents, context) en mapes sistèmics de poder i perfils conductuals.",
+                btn: "ACCEDIR A CONSOLA",
+                title: "ANALISTA SISTÈMIC"
+            },
+            en: {
+                text: "Operational intelligence suite. Transform unstructured data (audio, docs, context) into systemic power maps and behavioral profiles.",
+                btn: "ACCESS CONSOLE",
+                title: "SYSTEMIC ANALYST"
+            }
+        };
+
+        let currentLang = 'es';
+
+        function setLanguage(lang, btnElement) {
+            currentLang = lang;
+            
+            // Efecto de desvanecimiento suave para el texto
+            const textElement = document.getElementById('intro-text');
+            textElement.style.opacity = 0;
+            
+            setTimeout(() => {
+                // Actualizar textos
+                textElement.innerText = content[lang].text;
+                document.getElementById('enter-btn').innerText = content[lang].btn;
+                document.querySelector('h1').innerText = content[lang].title;
+                textElement.style.opacity = 1;
+            }, 200);
+
+            // Actualizar botones
+            document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
+            if(btnElement) btnElement.classList.add('active');
+        }
+
+        function enterSystem() {
+            // Feedback visual al pulsar
+            const btn = document.getElementById('enter-btn');
+            btn.innerText = "INITIALIZING...";
+            btn.style.opacity = "0.7";
+            
+            setTimeout(() => {
+                window.location.href = `/app?lang=${currentLang}`;
+            }, 300);
+        }
+
+        // Inicializar
+        window.onload = () => {
+            const defaultBtn = document.querySelector('.lang-btn.active');
+            setLanguage('es', defaultBtn);
+            // Pequeña corrección para transiciones CSS
+            document.getElementById('intro-text').style.transition = "opacity 0.2s ease";
+        };
+    </script>
+</body>
+</html>
